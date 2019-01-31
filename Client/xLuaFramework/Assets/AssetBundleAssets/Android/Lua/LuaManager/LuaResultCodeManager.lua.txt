@@ -1,0 +1,52 @@
+--[[
+    功能：返回码
+]]
+local LuaResultCodeManager = {}
+
+local function Loser(data)
+    LuaUiPanelManager:ShowUiPanelNone(LuaUiPanelRegister.ResultCode, data.Message)
+    if (data.Cmd == opCodes.Client_EnterRoom) then
+        -- 进入房间失败
+        if (data.Code == 77) then
+            --房间不存在
+            if (CurSceneType ~= SceneType.Main) then
+                LuaScenesManager:LoadScene(LuaAssetsType.ScenesType.Main)
+            end
+        elseif (data.Code == 173) then
+            -- 玩家禁止进入房间
+            if (CurSceneType ~= SceneType.Main) then
+                LuaScenesManager:LoadScene(LuaAssetsType.ScenesType.Main)
+            end
+        end
+    end
+end
+
+local function Succeed(data)
+    if data.Cmd == opCodes.Client_RoomCreate then
+        --创建房间成功
+    elseif data.Cmd == opCodes.Client_CreateClubQuery then
+        -- 创建社区成功
+    elseif data.Cmd == opCodes.Client_PlayerQueryEnterClub then
+        -- 加入社区成功
+    elseif data.Cmd == opCodes.Client_CreateAlignmentQuery then
+        -- 申请工会
+    elseif data.Cmd == opCodes.Client_SendMoneyOrGold then
+        -- 申请工会
+    elseif data.Cmd == opCodes.Client_PlayerLeaveClub then
+        -- 退出社区
+    elseif data.Cmd == opCodes.Client_MoneyToGold then
+        -- 转入至基金成功
+    elseif data.Cmd == opCodes.Client_GoldToMoney then
+    -- 转出至余额成功
+    end
+end
+
+function LuaResultCodeManager:OnResultCode(data)
+    if data.Code == 0 then
+        Succeed(data)
+    else
+        Loser(data)
+    end
+end
+
+return LuaResultCodeManager

@@ -1,0 +1,14 @@
+ManifestFileVersion: 0
+CRC: 1550997867
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f42a26062092e56aafdd3fbf745a06c2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
+HashAppended: 0
+ClassTypes: []
+Assets:
+- Assets/MyAssets/Scenes/04_Game.unity
+Dependencies: []

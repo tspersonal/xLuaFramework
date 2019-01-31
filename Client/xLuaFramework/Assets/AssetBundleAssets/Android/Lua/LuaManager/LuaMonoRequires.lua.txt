@@ -1,0 +1,8 @@
+--[[
+    功能：加载Mono脚本
+]]
+local LuaMonoRequires = {}
+
+LuaMonoRequires[LuaMonoRegister.SoundsManager] = require "Module.Manager.LuaSoundsManager"
+
+return LuaMonoRequires

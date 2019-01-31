@@ -1,0 +1,113 @@
+--[[
+    功能：三级弹窗 处理服务器调起的提示弹窗 
+]]
+local LuaThirdDialog = LuaUiBase:New()
+
+LuaThirdDialog.Name = LuaUiPanelRegister.ThirdDialog.AssetName
+
+-- 提示数据
+LuaThirdDialog.DialogData = nil
+
+-- 标题
+local _labTitle
+-- 内容
+local _labDesc
+-- 确定
+local _btnConfirm
+local _labConfirm
+-- 取消
+local _btnCancel
+local _labCancel
+
+-- 服务器弹窗消息队列
+local _queueDialog = Queue:New()
+
+-- 解决消息完毕
+local function ShowThirdDialog()
+    if (_queueDialog:IsEmpty()) then
+        LuaUiPanelManager:HideUiPanel(LuaUiPanelRegister.ThirdDialog, false)
+    else
+        LuaUiPanelManager:HideUiPanel(LuaUiPanelRegister.ThirdDialog, false)
+        local dialogData = _queueDialog:DeQueue()
+        if (dialogData == nil) then
+            return
+        end
+        LuaGlobalFuntcion:ShowThirdDialog()
+        if (dialogData.DialogType == nil) then
+            dialogData.DialogType = ThirdDialogType.None
+        end
+        if (dialogData.Title == nil) then
+            _labTitle.text = "提 示"
+        else
+            _labTitle.text = dialogData.Title
+        end
+        if (dialogData.Desc == nil) then
+            _labDesc.text = ""
+        else
+            _labDesc.text = dialogData.Desc
+        end
+        if (dialogData.Confirm == nil) then
+            _labConfirm.text = "确 认"
+        else
+            _labConfirm.text = dialogData.Confirm
+        end
+        if (dialogData.Cancel == nil or dialogData.DialogType == ThirdDialogType.None) then
+            _labCancel.text = "取 消"
+            _btnConfirm:SetActive(true)
+            _btnCancel:SetActive(false)
+            _btnConfirm.transform.localPosition = CS.UnityEngine.Vector3(0, -126, 0)
+        else
+            _labCancel.text = dialogData.Cancel
+            _btnConfirm:SetActive(true)
+            _btnCancel:SetActive(true)
+            _btnConfirm.transform.localPosition = CS.UnityEngine.Vector3(133, -126, 0)
+            _btnCancel.transform.localPosition = CS.UnityEngine.Vector3(-133, -126, 0)
+        end
+        LuaThirdDialog.DialogData = dialogData
+    end
+end
+
+-- 点击确定
+local function OnClickBtnConfirm(go)
+    if
+        (LuaThirdDialog.DialogData == nil or LuaThirdDialog.DialogData.DialogType == nil or
+            LuaThirdDialog.DialogData.DialogType == ThirdDialogType.None)
+     then
+        -- 无处理
+    elseif (LuaThirdDialog.DialogData.DialogType == ThirdDialogType.Offlined) then
+    -- 挤线
+    end
+    ShowThirdDialog()
+end
+
+-- 点击取消
+local function OnClickBtnCancel(go)
+    ShowThirdDialog()
+end
+
+function LuaThirdDialog:DoAwake()
+    local base = self.Root.transform:Find("Base")
+    _labTitle = base:Find("LabTitle"):GetComponent(typeof(CS.UILabel))
+    _labDesc = base:Find("LabDesc"):GetComponent(typeof(CS.UILabel))
+    _btnConfirm = base:Find("BtnConfirm").gameObject
+    _labConfirm = _btnConfirm.transform:Find("LabConfirm"):GetComponent(typeof(CS.UILabel))
+    _btnCancel = base:Find("BtnCancel").gameObject
+    _labCancel = _btnCancel.transform:Find("LabCancel"):GetComponent(typeof(CS.UILabel))
+end
+
+function LuaThirdDialog:DoRegister()
+    LuaUiEventListener:OnClick(_btnConfirm, OnClickBtnConfirm)
+    LuaUiEventListener:OnClick(_btnCancel, OnClickBtnCancel)
+end
+
+function LuaThirdDialog:DoSetData(dialogData)
+    if (dialogData ~= nil) then
+        _queueDialog:EnQueue(dialogData)
+    end
+end
+
+function LuaThirdDialog:DoOnEnable()
+    ShowThirdDialog()
+end
+
+return LuaThirdDialog

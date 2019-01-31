@@ -1,0 +1,229 @@
+--[[
+    功能：提供资源类型快捷访问资源的资源名
+]]
+local LuaAssetsType = {}
+
+-------------------- 场景类型 --------------------
+LuaAssetsType.ScenesType = {
+    InitGame = {
+        AssetName = LuaAssetsRegister.Scenes.InitGame.AssetName.InitGame,
+        ResoutcesPath = LuaAssetsRegister.Scenes.InitGame.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Scenes.InitGame.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Scenes.InitGame.AssetBundlePath
+    },
+    Login = {
+        AssetName = LuaAssetsRegister.Scenes.Login.AssetName.Login,
+        ResoutcesPath = LuaAssetsRegister.Scenes.Login.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Scenes.Login.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Scenes.Login.AssetBundlePath
+    },
+    Main = {
+        AssetName = LuaAssetsRegister.Scenes.Main.AssetName.Main,
+        ResoutcesPath = LuaAssetsRegister.Scenes.Main.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Scenes.Main.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Scenes.Main.AssetBundlePath
+    },
+    Game = {
+        AssetName = LuaAssetsRegister.Scenes.Game.AssetName.Game,
+        ResoutcesPath = LuaAssetsRegister.Scenes.Game.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Scenes.Game.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Scenes.Game.AssetBundlePath
+    }
+}
+
+-------------------- 声音类型 --------------------
+LuaAssetsType.SoundsType = {
+    -- 背景音乐
+    MainBgSound = {
+        AssetName = LuaAssetsRegister.Sounds.GameBgSounds.AssetName.MainBgSound,
+        ResoutcesPath = LuaAssetsRegister.Sounds.GameBgSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.GameBgSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.GameBgSounds.AssetBundlePath
+    },
+    GameBgSound = {
+        AssetName = LuaAssetsRegister.Sounds.GameBgSounds.AssetName.GameBgSound,
+        ResoutcesPath = LuaAssetsRegister.Sounds.GameBgSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.GameBgSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.GameBgSounds.AssetBundlePath
+    },
+    -- Ui音效
+    Button = {
+        AssetName = LuaAssetsRegister.Sounds.UiSounds.AssetName.Button,
+        ResoutcesPath = LuaAssetsRegister.Sounds.UiSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.UiSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.UiSounds.AssetBundlePath
+    },
+    -- 特效音效
+    Win = {
+        AssetName = LuaAssetsRegister.Sounds.EffectSounds.AssetName.Win,
+        ResoutcesPath = LuaAssetsRegister.Sounds.EffectSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.EffectSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.EffectSounds.AssetBundlePath
+    },
+    -- 表情音效
+    Face2001 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2001,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2002 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2002,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2003 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2003,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2004 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2004,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2005 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2005,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2006 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2006,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2007 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2007,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2008 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2008,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2009 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2009,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2010 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2010,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Face2011 = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Face2011,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    -- 游戏音效
+    Seating = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Seating,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    },
+    Standup = {
+        AssetName = LuaAssetsRegister.Sounds.FaceSounds.AssetName.Standup,
+        ResoutcesPath = LuaAssetsRegister.Sounds.FaceSounds.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Sounds.FaceSounds.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Sounds.FaceSounds.AssetBundlePath
+    }
+}
+
+-------------------- 纹理类型 --------------------
+LuaAssetsType.TexturesType = {
+    -- 公共纹理
+    BgPanel = {
+        AssetName = LuaAssetsRegister.Textures.CommonTextures.AssetName.BgPanel,
+        ResoutcesPath = LuaAssetsRegister.Textures.CommonTextures.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.CommonTextures.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.CommonTextures.AssetBundlePath
+    },
+    RoundedRectangle = {
+        AssetName = LuaAssetsRegister.Textures.CommonTextures.AssetName.RoundedRectangle,
+        ResoutcesPath = LuaAssetsRegister.Textures.CommonTextures.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.CommonTextures.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.CommonTextures.AssetBundlePath
+    },
+    -- 默认头像
+    PlayerHead = {
+        AssetName = LuaAssetsRegister.Textures.DefaultHead.AssetName.PlayerHead,
+        ResoutcesPath = LuaAssetsRegister.Textures.DefaultHead.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.DefaultHead.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.DefaultHead.AssetBundlePath
+    },
+    ClubHead = {
+        AssetName = LuaAssetsRegister.Textures.DefaultHead.AssetName.ClubHead,
+        ResoutcesPath = LuaAssetsRegister.Textures.DefaultHead.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.DefaultHead.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.DefaultHead.AssetBundlePath
+    },
+    UnionHead = {
+        AssetName = LuaAssetsRegister.Textures.DefaultHead.AssetName.UnionHead,
+        ResoutcesPath = LuaAssetsRegister.Textures.DefaultHead.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.DefaultHead.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.DefaultHead.AssetBundlePath
+    },
+    EmptySeatHead = {
+        AssetName = LuaAssetsRegister.Textures.DefaultHead.AssetName.EmptySeatHead,
+        ResoutcesPath = LuaAssetsRegister.Textures.DefaultHead.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.DefaultHead.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.DefaultHead.AssetBundlePath
+    },
+    -- 桌布
+    GameBg1 = {
+        AssetName = LuaAssetsRegister.Textures.GameBg.AssetName.GameBg1,
+        ResoutcesPath = LuaAssetsRegister.Textures.GameBg.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.GameBg.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.GameBg.AssetBundlePath
+    },
+    GameBg2 = {
+        AssetName = LuaAssetsRegister.Textures.GameBg.AssetName.GameBg2,
+        ResoutcesPath = LuaAssetsRegister.Textures.GameBg.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.GameBg.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.GameBg.AssetBundlePath
+    },
+    GameBg3 = {
+        AssetName = LuaAssetsRegister.Textures.GameBg.AssetName.GameBg3,
+        ResoutcesPath = LuaAssetsRegister.Textures.GameBg.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Textures.GameBg.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Textures.GameBg.AssetBundlePath
+    }
+}
+
+-------------------- 材质类型 --------------------
+LuaAssetsType.MaterialsType = {
+    -- Shader材质
+    ColoredGray = {
+        AssetName = LuaAssetsRegister.Materials.ShaderMaterials.AssetName.ColoredGray,
+        ResoutcesPath = LuaAssetsRegister.Materials.ShaderMaterials.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Materials.ShaderMaterials.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Materials.ShaderMaterials.AssetBundlePath
+    },
+    CricleMask = {
+        AssetName = LuaAssetsRegister.Materials.ShaderMaterials.AssetName.CricleMask,
+        ResoutcesPath = LuaAssetsRegister.Materials.ShaderMaterials.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Materials.ShaderMaterials.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Materials.ShaderMaterials.AssetBundlePath
+    },
+    RoundedRectangleMask = {
+        AssetName = LuaAssetsRegister.Materials.ShaderMaterials.AssetName.RoundedRectangleMask,
+        ResoutcesPath = LuaAssetsRegister.Materials.ShaderMaterials.ResourcesPath,
+        AssetBundleName = LuaAssetsRegister.Materials.ShaderMaterials.AssetBundleName,
+        AssetBundlePath = LuaAssetsRegister.Materials.ShaderMaterials.AssetBundlePath
+    }
+}
+
+return LuaAssetsType

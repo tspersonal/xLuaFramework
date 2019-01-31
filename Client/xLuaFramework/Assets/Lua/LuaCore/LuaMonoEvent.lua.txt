@@ -1,0 +1,16 @@
+--[[
+    功能：用于绑定C#脚本
+]]
+local LuaMonoEvent = {}
+
+-- 绑定ui mono事件
+function LuaMonoEvent:BindUiBaseEvent(sMonoEventType, go, luaFun)
+    CS.LuaMonoEvent.BindUiBaseEvent(sMonoEventType, go, luaFun)
+end
+
+-- 绑定mono事件
+function LuaMonoEvent:BindMonoEvent(sMonoEventType, go, luaFun)
+    CS.LuaMonoEvent.BindUiBaseEvent(sMonoEventType, go, luaFun)
+end
+
+return LuaMonoEvent

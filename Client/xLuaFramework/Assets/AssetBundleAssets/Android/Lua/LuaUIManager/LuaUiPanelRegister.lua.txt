@@ -1,0 +1,57 @@
+--[[
+    功能：注册界面资源类型
+]]
+local LuaUiPanelRegister = {
+    --[[ Common ]]
+    -- 冒泡返回码
+    ResultCode = {
+        LevelType = UiLevelType.Third,
+        AssetName = "panel_result_code",
+        ResoutcesPath = "Prefabs/Panel/Common/panel_result_code",
+        AssetBundleName = "panel_result_code",
+        AssetBundlePath = "prefabs/uipanel/Common/panel_result_code.ab"
+    },
+    -- 等待界面
+    Await = {
+        LevelType = UiLevelType.Third,
+        AssetName = "panel_await",
+        ResoutcesPath = "Prefabs/Panel/Common/panel_await",
+        AssetBundleName = "panel_await",
+        AssetBundlePath = "prefabs/uipanel/Common/panel_await.ab"
+    },
+    -- 三级弹窗
+    ThirdDialog = {
+        LevelType = UiLevelType.Second,
+        AssetName = "panel_third_dialog",
+        ResoutcesPath = "Prefabs/Panel/Common/panel_third_dialog",
+        AssetBundleName = "panel_third_dialog",
+        AssetBundlePath = "prefabs/uipanel/Common/panel_third_dialog.ab"
+    },
+    -- 二级弹窗
+    SecondDialog = {
+        LevelType = UiLevelType.First,
+        AssetName = "panel_second_dialog",
+        ResoutcesPath = "Prefabs/Panel/Common/panel_second_dialog",
+        AssetBundleName = "panel_second_dialog",
+        AssetBundlePath = "prefabs/uipanel/Common/panel_second_dialog.ab"
+    },
+    -- 跑马灯
+    Marquee = {
+        LevelType = UiLevelType.First,
+        AssetName = "panel_marquee",
+        ResoutcesPath = "Prefabs/Panel/Common/panel_marquee",
+        AssetBundleName = "panel_marquee",
+        AssetBundlePath = "prefabs/uipanel/Common/panel_marquee.ab"
+    },
+    --[[ Login ]]
+    -- 登录界面
+    Login = {
+        LevelType = UiLevelType.Zero,
+        AssetName = "panel_login",
+        ResoutcesPath = "Prefabs/Panel/Login/panel_login",
+        AssetBundleName = "panel_login",
+        AssetBundlePath = "prefabs/uipanel/login/panel_login.ab"
+    }
+}
+
+return LuaUiPanelRegister

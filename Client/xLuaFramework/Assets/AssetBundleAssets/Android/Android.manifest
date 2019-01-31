@@ -1,0 +1,81 @@
+ManifestFileVersion: 0
+CRC: 3638168435
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: scenes/login.ab
+      Dependencies: {}
+    Info_1:
+      Name: scenes/main.ab
+      Dependencies: {}
+    Info_2:
+      Name: scenes/game.ab
+      Dependencies: {}
+    Info_3:
+      Name: fonts/my_fonts.ab
+      Dependencies: {}
+    Info_4:
+      Name: atlas/my_atlas.ab
+      Dependencies:
+        Dependency_0: shaders/my_shaders.ab
+        Dependency_1: materials/shader_materials.ab
+    Info_5:
+      Name: shaders/my_shaders.ab
+      Dependencies: {}
+    Info_6:
+      Name: sounds/face_sounds.ab
+      Dependencies: {}
+    Info_7:
+      Name: sounds/game_sounds.ab
+      Dependencies: {}
+    Info_8:
+      Name: textures/default_head.ab
+      Dependencies: {}
+    Info_9:
+      Name: textures/game_bg.ab
+      Dependencies: {}
+    Info_10:
+      Name: sounds/game_bg_sounds.ab
+      Dependencies: {}
+    Info_11:
+      Name: sounds/ui_sounds.ab
+      Dependencies: {}
+    Info_12:
+      Name: prefabs/uipanel/common/panel_result_code.ab
+      Dependencies:
+        Dependency_0: fonts/my_fonts.ab
+        Dependency_1: shaders/my_shaders.ab
+        Dependency_2: textures/common_textures.ab
+    Info_13:
+      Name: textures/common_textures.ab
+      Dependencies: {}
+    Info_14:
+      Name: prefabs/uipanel/login/panel_login.ab
+      Dependencies:
+        Dependency_0: fonts/my_fonts.ab
+        Dependency_1: atlas/my_atlas.ab
+        Dependency_2: shaders/my_shaders.ab
+        Dependency_3: textures/common_textures.ab
+    Info_15:
+      Name: materials/shader_materials.ab
+      Dependencies:
+        Dependency_0: shaders/my_shaders.ab
+    Info_16:
+      Name: prefabs/uipanel/common/panel_await.ab
+      Dependencies:
+        Dependency_0: fonts/my_fonts.ab
+        Dependency_1: atlas/my_atlas.ab
+    Info_17:
+      Name: prefabs/uipanel/common/panel_second_dialog.ab
+      Dependencies:
+        Dependency_0: atlas/my_atlas.ab
+    Info_18:
+      Name: prefabs/uipanel/common/panel_marquee.ab
+      Dependencies:
+        Dependency_0: fonts/my_fonts.ab
+        Dependency_1: atlas/my_atlas.ab
+    Info_19:
+      Name: prefabs/uipanel/common/panel_third_dialog.ab
+      Dependencies:
+        Dependency_0: fonts/my_fonts.ab
+        Dependency_1: atlas/my_atlas.ab

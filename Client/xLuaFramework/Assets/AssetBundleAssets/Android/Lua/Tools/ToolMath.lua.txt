@@ -1,0 +1,65 @@
+--[[
+    类型：模板module
+    功能：数学函数工具
+    描述：方便扩展数学函数的其他方法，以及对数字的操作
+]]
+local ToolMath = {}
+
+-- 转为2位小数字符串  return (string) 0.00
+function ToolMath.SplitNumber(number)
+    if (number) then
+        return string.format("%.2f", number)
+    else
+        LuaLog.Log("ToolMath.SplitNumber ---> number为空", LogType.Error)
+        return "0.00"
+    end
+end
+
+-- 转为百分比,decimals保留几位小数 return (string) 0.00%
+function ToolMath.NumberToPercent(number, decimals)
+    decimals = decimals or 0
+    local format = "%0.2f"
+    if (decimals == 0) then
+        format = "%u"
+    else
+        format = "%0." .. decimals .. "f"
+    end
+    return string.format(format, number * 100) .. "%"
+end
+
+-- 显示比较大的数字 返回小数
+function ToolMath.ShowBigNumToInt(number)
+    if (number == nil) then
+        return "0"
+    end
+    if (number > 1000000) then
+        return math.floor((number / 1000000)) .. "M"
+    elseif (number > 1000) then
+        return math.floor((number / 1000)) .. "K"
+    else
+        return math.floor(number)
+    end
+end
+
+-- 显示比较大的数字
+function ToolMath.ShowBigNumToFloat(number)
+    if (number == nil) then
+        return "0"
+    end
+    if (number > 1000000) then
+        return (number / 1000000) .. "M"
+    elseif (number > 1000) then
+        return (number / 1000) .. "K"
+    else
+        return number
+    end
+end
+
+-- 就近取整 返回int
+function ToolMath.RoundToInt(number)
+    if (number) then
+        return CS.UnityEngine.Mathf.RoundToInt(number)
+    end
+end
+
+return ToolMath

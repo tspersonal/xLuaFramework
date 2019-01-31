@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 3150729459
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4010c0da9b161373a5f6927490cc92de
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Textures/DefaultHead/ClubHead.png
+- Assets/MyAssets/Resources/Textures/DefaultHead/PlayerHead.png
+- Assets/MyAssets/Resources/Textures/DefaultHead/EmptySeatHead.png
+- Assets/MyAssets/Resources/Textures/DefaultHead/UnionHead.png
+Dependencies: []

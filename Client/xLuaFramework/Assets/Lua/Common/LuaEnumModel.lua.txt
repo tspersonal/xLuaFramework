@@ -1,0 +1,497 @@
+------------------------------------公共枚举------------------------------------
+-- 加载类型
+LoadAssetsType = {
+    -- 电脑端Resources加载
+    Resources = 0,
+    -- AssetBundle加载
+    AssetBundle = 1
+}
+
+-- 针对链接服务器成功的处理
+ConnectServerSucceedType = {
+    -- 无处理
+    None = 0,
+    -- 加载全局资源
+    LoadAssets = 1,
+    -- 重新登录
+    ReLogin = 2,
+    -- 注销
+    Logout = 3
+}
+
+-- log类型
+LogType = {
+    -- 正常信息
+    Normal = 0,
+    -- Debug信息
+    Debug = 1,
+    -- 信息内容
+    Info = 2,
+    -- 警告信息
+    Warning = 3,
+    -- 错误信息
+    Error = 4,
+    -- 异常信息
+    Except = 5,
+    -- 重要提示信息
+    Critical = 6
+}
+
+-- 资源类型 Resources使用
+ResType = {
+    None = 0,
+    -- 物体
+    GameObject = 1,
+    -- 文本资源
+    Text = 2,
+    -- 精灵
+    Sprite = 3,
+    -- 纹理
+    Texture = 4,
+    -- 声音
+    Sound = 5,
+    -- 特效
+    Effect = 6,
+    -- 着色器
+    Shader = 7,
+    -- 材质
+    Material = 8
+}
+
+-- UI变化事件类型
+OnChangeType = {
+    None = 0,
+    -- 输入框
+    Input = 1,
+    -- 进度条
+    ProgressBar = 2,
+    -- 下拉框
+    PopupList = 3,
+    -- 单选框
+    Toggle = 4,
+    --
+    Widget = 5
+}
+
+-- 界面打开类型
+ShowUiType = {
+    None = 0,
+    -- 由小变大
+    MinToMax = 1,
+    -- 由左到右
+    LeftToRight = 2,
+    -- 由右到左
+    RightToLeft = 3,
+    -- 由上到下
+    TopToBottom = 4,
+    -- 由下到上
+    BottomToTop = 5,
+    -- 淡入淡出
+    FadeInToOut = 6,
+    -- 自定义
+    Custom = 6
+}
+
+-- 界面等级类型
+UiLevelType = {
+    -- 基础级界面，一般代表永远存在的界面
+    Zero = 0,
+    -- 第一级界面，代表基础界面派生出的功能界面
+    First = 1,
+    -- 第二级界面，代表公共的通用界面
+    Second = 2,
+    -- 第三级界面，代表公共的置于所有界面之上的界面
+    Third = 3,
+    -- 自定义界面
+    Custom = 4
+}
+
+-- 二级弹窗类型 客户端调起
+SecondDialogType = {
+    -- 无处理 只显示确定
+    None = 0,
+    -- 注销账号
+    LogoutAccount = 1,
+    -- 解散房间
+    DissolveRoom = 2
+}
+
+-- 三级弹窗类型 服务器调起
+ThirdDialogType = {
+    -- 账号被挤，下线
+    None = 0,
+    Offlined = 1
+}
+
+-- 账号改变类型
+LivingType = {
+    Sex = 0,
+    OtherName = 1,
+    Password = 2,
+    HeadId = 3,
+    Money = 4,
+    Gold = 5
+}
+
+-- 公告类型
+NoticeType = {
+    Alignment = 0,
+    Club = 1
+}
+
+-- 房间状态
+RoomStatusType = {
+    None = 0,
+    WaitStartGame = 1,
+    PlayGame = 2,
+    GameOver = 3,
+    RoomOver = 4
+}
+
+-- 自动操作类型
+AutoOperateType = {
+    None = 0,
+    --自动看牌
+    WatchCard = 1,
+    --能看就看，不能看就弃牌
+    WatchOrDropCard = 2
+}
+
+-- 玩家状态
+PlayStatus = {
+    None = 0,
+    -- 弃牌
+    Drop = 1,
+    -- 正在玩
+    Playing = 2,
+    -- AllIn
+    Allin = 3
+}
+
+-- 牌型
+PokerType = {
+    DanPai = 0,
+    DanDui = 1,
+    LiangDui = 2,
+    SanTiao = 3,
+    ShunZi = 4,
+    TongHua = 5,
+    HuLu = 6,
+    SiTiao = 7,
+    TongHuaShun = 8
+}
+
+-- 操作类型
+TexasOperateType = {
+    None = 0,
+    --弃牌
+    DropCard = 1,
+    --看牌
+    WatchCard = 2,
+    --加注
+    AddChips = 3,
+    --跟注
+    FllowChips = 4,
+    --allin
+    AllIn = 5,
+    --下注
+    DownChips = 6,
+    --拖动下注/加注
+    DragChips = 7
+}
+
+-- 请求房间记录的类型
+TexasRoomRecordQueryType = {
+    Persional = 0,
+    Club = 1,
+    Alignment = 2
+}
+
+-- 注销类型
+LogoutType = {
+    None = 0,
+    --正常下线
+    KickByOtherConnection = 1,
+    --被别的客户端踢下线
+    LoginFailed = 2,
+    --登录失败
+    LoginException = 3,
+    --登录异常
+    QueryLogout = 4
+    --请求注销
+}
+
+-- 记录类型
+RecordType = {
+    --玩家申请加入俱乐部
+    PlayerQueryEnterClub = 1,
+    --俱乐部邀请玩家
+    ClubInvitePlayer = 2,
+    --玩家离开俱乐部
+    PlayerLeaveClub = 3,
+    --俱乐部踢玩家
+    ClubTickPlayer = 4,
+    --俱乐部成员信用
+    ClubMemberCredit = 5,
+    --俱乐部基金充值
+    ClubRechargeMoney = 6,
+    --俱乐部赠送基金
+    ClubSendMoney = 7,
+    --俱乐部成员信用 结算
+    ClubMemberCredit_Settle = 8,
+    --俱乐部成员信用 设置初始信用
+    ClubMemberCredit_SetTake = 9,
+    --俱乐部成员信用 清空初始信用
+    ClubMemberCredit_ZeroTake = 10,
+    --俱乐部成员信用 房间购买筹码消耗
+    ClubMemberCredit_RoomBuy = 11,
+    --俱乐部成员信用 管理员同意玩家购买筹码
+    ClubMemberCredit_ManagerAgree = 12,
+    --俱乐部成员信用 房间结束，信用返还(抽成)
+    ClubMemberCredit_RoomOver = 13,
+    --俱乐部 从联盟获得基金
+    ClubMoney_GetFromAlignment = 14,
+    ClubQueryEnterAlignment = 50,
+    --俱乐部申请加入联盟
+    AlignmentInviteClub = 51,
+    --联盟邀请俱乐部
+    ClubLeaveAlignment = 52,
+    --俱乐部离开联盟
+    AlignmentTickClub = 53,
+    --联盟踢俱乐部
+    --联盟基金充值
+    AlignmentMoney_Recharge = 54,
+    --联盟赠送基金
+    AlignmentMoney_Send = 55
+}
+
+-- 俱乐部成员的设置类型
+ClubMemberSettingType = {
+    --结算差额
+    ClearingDiff = 0,
+    --信用开关
+    CreditOpen = 1,
+    --抽成比例
+    PumpPercent = 2,
+    --修改信用值
+    TakeCreditChange = 3
+}
+
+-- 改变的类型
+ChangeType = {
+    Add = 0,
+    --添加
+    Remove = 1,
+    --删除
+    Tick = 2,
+    --踢出
+    Change = 3
+    --改变
+}
+
+-- 房间聊天类型
+RoomChatType = {
+    Sound = 0,
+    --语音
+    Face = 1,
+    --表情
+    FeeFace = 2
+    --文字
+}
+------------------------------------公共枚举------------------------------------
+
+------------------------------------德扑枚举------------------------------------
+-- 创建的房间类型
+RoomCreateType = {
+    --私人
+    Persional = 0,
+    --俱乐部
+    Club = 1,
+    --联盟
+    Alignment = 2
+}
+
+RoomSubStatusType = {
+    None = 0,
+    --是否购买大大盲
+    AskIfWantToBeStraddle = 1,
+    --等待玩家下注
+    WaitPlayerDownChips = 2,
+    --等待玩家购买保险
+    AskPlayerBuyInsurance = 3,
+    --等待客户端结算动画结束
+    WaitPlayerShowedCard = 4,
+    --本局结束
+    Over = 5
+}
+
+-- 保险选择类型
+InsuranceSelectType = {
+    SelectCard = 0,
+    --选牌
+    SelectChips = 1
+    --选筹码
+}
+
+-- 显示的牌
+ShowCardFlag = {
+    None = 0,
+    Card1 = 1,
+    Card2 = 2,
+    All = 3
+}
+
+-- 买保险类型
+BuyInsuranceType = {
+    None = 0,
+    Min = 1,
+    --最小
+    Fit = 2,
+    --保底
+    Max = 3
+    --全部
+}
+------------------------------------德扑枚举------------------------------------
+
+------------------------------------梭哈枚举------------------------------------
+ShEnum = {}
+
+-- 玩法
+ShEnum.RoomPlayType = {
+    -- 经典
+    JingDian = 0,
+    -- 癞子
+    LaiZi = 1,
+    -- 短牌
+    DuanPai = 2
+}
+
+-- 比牌类型
+ShEnum.RoomBiPaiType = {
+    -- 通比
+    TongBi = 0,
+    -- 比底
+    BiDi = 1
+}
+
+-- 设置的标记
+ShEnum.RoomSettingFlag = {
+    None = 0,
+    -- 控制带入
+    ControlTakeChip = 1 << 0,
+    -- 强制大大盲
+    ForceStraddle = 1 << 1,
+    -- ip检查
+    CheckIp = 1 << 2,
+    -- 距离检查
+    CheckGPS = 1 << 3,
+    -- 自动激活房间
+    AutoActiveRoom = 1 << 4,
+    -- 奖池返利，抽水
+    JackPotOpen = 1 << 5,
+    -- 保险
+    InsuranceOpen = 1 << 6,
+    -- sng模式
+    SNGOpen = 1 << 7,
+    -- 暂停
+    RoomSuspend = 1 << 8,
+    -- 房间时间结束
+    RoomTimeOut = 1 << 9,
+    -- 房间解散
+    RoomDismissed = 1 << 10,
+    -- 限制下注
+    LimitChips = 1 << 11
+}
+
+-- 对应的座位坐标 x轴偏移量 +- 56
+ShEnum.SeatPosition = {
+    {
+        -- 9人
+        CS.UnityEngine.Vector3(0, -557),
+        CS.UnityEngine.Vector3(-313, -182),
+        CS.UnityEngine.Vector3(-313, 87),
+        CS.UnityEngine.Vector3(-313, 350),
+        CS.UnityEngine.Vector3(-135, 540),
+        CS.UnityEngine.Vector3(135, 540),
+        CS.UnityEngine.Vector3(313, 350),
+        CS.UnityEngine.Vector3(313, 87),
+        CS.UnityEngine.Vector3(313, -182)
+    },
+    {
+        -- 8人
+        CS.UnityEngine.Vector3(0, -557),
+        CS.UnityEngine.Vector3(-313, -182),
+        CS.UnityEngine.Vector3(-313, 87),
+        CS.UnityEngine.Vector3(-313, 350),
+        CS.UnityEngine.Vector3(0, 540),
+        CS.UnityEngine.Vector3(313, 350),
+        CS.UnityEngine.Vector3(313, 87),
+        CS.UnityEngine.Vector3(313, -182)
+    },
+    {
+        -- 6人
+        CS.UnityEngine.Vector3(0, -557),
+        CS.UnityEngine.Vector3(-313, 0),
+        CS.UnityEngine.Vector3(-313, 390),
+        CS.UnityEngine.Vector3(0, 557),
+        CS.UnityEngine.Vector3(313, 390),
+        CS.UnityEngine.Vector3(313, 0)
+    },
+    {
+        -- 2人
+        CS.UnityEngine.Vector3(0, -557),
+        CS.UnityEngine.Vector3(0, 540)
+    }
+}
+
+-- 玩家的状态
+ShEnum.PlayerState = {
+    -- 旁观者
+    Look = 0,
+    -- 在座位上
+    Sitdown = 1
+}
+
+-- 玩家相对视角
+ShEnum.PlayerView = {
+    -- 自己的本地视角
+    Local_View = 1,
+    -- 下方视角
+    Bottom_View = 2,
+    -- 左方视角
+    Left_View = 3,
+    -- 上方偏左视角
+    Top_Left_View = 4,
+    -- 上方偏右视角
+    Top_Right_View = 5,
+    -- 右方视角
+    Right_View = 6
+}
+
+------------------------------------梭哈枚举------------------------------------
+
+RoomForbidType = {
+    None = 0,
+    --入座
+    SeatDown = 1 << 0,
+    --聊天
+    Chat = 1 << 1,
+    --进入房间
+    EnterRoom = 1 << 2
+}
+
+ProcessStepType = {
+    Querying = 0,
+    --请求中
+    Agree = 1,
+    --同意
+    Refuse = 2,
+    --同意
+    TimOutRefuse = 3
+    --超时自动拒绝
+}
+
+UcpaasModuleType = {
+    AccountRegister = 0,
+    ModifyPassword = 1
+}

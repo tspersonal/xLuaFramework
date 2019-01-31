@@ -1,0 +1,117 @@
+--[[
+    功能：Lua资源加载
+    如果是AB的话 应该传入一个ABName作为传入到C#中的AB资源的Name（不是资源名，是.ab的名字）sName ~= sAbName
+                    传入一个ABPath作为传入到C#中的AB资源的路径
+    如果是Rs的话 应该传入一个Name作为传入到C#中的资源的名字 sAssetName == sAbName
+                    传入一个Path作为传入到C#中的资源的路径
+]]
+local LuaLoadAssets = {}
+
+function LuaLoadAssets:LoadAssetAsync(sAssetName, sPath, resType, luaFun, onLoad)
+    local loadType = CS.LocalData.LoadAssetsType
+    local assetInfo = nil
+    if (loadType == LoadAssetsType.Resources) then
+        -- 返回AssetInfo
+        assetInfo = CS.AssetsManager.Instance:LoadAssetsAsyncByIEnumerator(sAssetName, sPath, resType, onLoad)
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        -- 返回AbAssetInfo
+        assetInfo = CS.AssetsManager.Instance:LoadAbAssetsAsyncByIEnumerator(sAssetName, sPath, resType, onLoad)
+    end
+    if (assetInfo ~= nil and onLoad ~= nil) then
+        onLoad(assetInfo)
+    end
+end
+
+-- 加载 GameObject
+function LuaLoadAssets:LoadGameObjectAsync(sAssetName, sAbName, sPath, luaFun)
+    local loadType = CS.LocalData.LoadAssetsType
+    local OnLoad = function(asset)
+        if (loadType == LoadAssetsType.Resources) then
+            -- 拿取 ObjAsset 类型为Object
+            if (luaFun ~= nil) then
+                luaFun(asset.ObjAsset)
+            end
+        elseif (loadType == LoadAssetsType.AssetBundle) then
+            -- 拿取 AbAsset 类型为AssetBundle 需要LoadAsset
+            if (luaFun ~= nil) then
+                luaFun(asset.AbAsset:LoadAsset(sAssetName, typeof(CS.UnityEngine.GameObject)))
+            end
+        end
+    end
+    if (loadType == LoadAssetsType.Resources) then
+        self:LoadAssetAsync(sAssetName, sPath, ResType.GameObject, luaFun, OnLoad)
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        self:LoadAssetAsync(sAbName, sPath, ResType.GameObject, luaFun, OnLoad)
+    end
+end
+
+-- 加载 AudioClip
+function LuaLoadAssets:LoadAudioClipAsync(sAssetName, sAbName, sPath, luaFun)
+    local loadType = CS.LocalData.LoadAssetsType
+    local OnLoad = function(asset)
+        if (loadType == LoadAssetsType.Resources) then
+            -- 拿取 ObjAsset 类型为Object
+            if (luaFun ~= nil) then
+                luaFun(asset.ObjAsset)
+            end
+        elseif (loadType == LoadAssetsType.AssetBundle) then
+            -- 拿取 AbAsset 类型为AssetBundle 需要LoadAsset
+            if (luaFun ~= nil) then
+                luaFun(asset.AbAsset:LoadAsset(sAssetName, typeof(CS.UnityEngine.AudioClip)))
+            end
+        end
+    end
+    if (loadType == LoadAssetsType.Resources) then
+        self:LoadAssetAsync(sAssetName, sPath, ResType.Sound, luaFun, OnLoad)
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        self:LoadAssetAsync(sAbName, sPath, ResType.Sound, luaFun, OnLoad)
+    end
+end
+
+-- 加载 Texture2D
+function LuaLoadAssets:LoadTexture2DAsync(sAssetName, sAbName, sPath, luaFun)
+    local loadType = CS.LocalData.LoadAssetsType
+    local OnLoad = function(asset)
+        if (loadType == LoadAssetsType.Resources) then
+            -- 拿取 ObjAsset 类型为Object
+            if (luaFun ~= nil) then
+                luaFun(asset.ObjAsset)
+            end
+        elseif (loadType == LoadAssetsType.AssetBundle) then
+            -- 拿取 AbAsset 类型为AssetBundle 需要LoadAsset
+            if (luaFun ~= nil) then
+                luaFun(asset.AbAsset:LoadAsset(sAssetName, typeof(CS.UnityEngine.Texture2D)))
+            end
+        end
+    end
+    if (loadType == LoadAssetsType.Resources) then
+        self:LoadAssetAsync(sAssetName, sPath, ResType.Texture, luaFun, OnLoad)
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        self:LoadAssetAsync(sAbName, sPath, ResType.Texture, luaFun, OnLoad)
+    end
+end
+
+-- 加载 TextAsset
+function LuaLoadAssets:LoadTextAssetAsync(sAssetName, sAbName, sPath, luaFun)
+    local loadType = CS.LocalData.LoadAssetsType
+    local OnLoad = function(asset)
+        if (loadType == LoadAssetsType.Resources) then
+            -- 拿取 ObjAsset 类型为Object
+            if (luaFun ~= nil) then
+                luaFun(asset.ObjAsset)
+            end
+        elseif (loadType == LoadAssetsType.AssetBundle) then
+            -- 拿取 AbAsset 类型为AssetBundle 需要LoadAsset
+            if (luaFun ~= nil) then
+                luaFun(asset.AbAsset:LoadAsset(sAssetName, typeof(CS.UnityEngine.TextAsset)))
+            end
+        end
+    end
+    if (loadType == LoadAssetsType.Resources) then
+        self:LoadAssetAsync(sAssetName, sPath, ResType.Text, luaFun, OnLoad)
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        self:LoadAssetAsync(sAbName, sPath, ResType.Text, luaFun, OnLoad)
+    end
+end
+
+return LuaLoadAssets

@@ -1,0 +1,88 @@
+--[[
+    功能：Lua加载脚本入口
+    描述：加载所有的单例的脚本
+]]
+local breakSocketHandle, debugXpCall = require("LuaDebug")("localhost", 7003)
+
+--[[ 预加载xLua的API脚本 ]]
+LuaSocket = require "socket"
+
+--[[ 预加载所有的Lua非模块脚本 ]]
+require "LuaCsharpe"
+
+--[[ 预加载所有的Lua模块脚本 ]]
+-- Tools
+LuaLog = require "Tools.LuaLog"
+ToolTable = require "Tools.ToolTable"
+ToolMath = require "Tools.ToolMath"
+ToolOther = require "Tools.ToolOther"
+ToolString = require "Tools.ToolString"
+ToolTime = require "Tools.ToolTime"
+Dictionary = require "Tools.Dictionary"
+List = require "Tools.List"
+Queue = require "Tools.Queue"
+Stack = require "Tools.Stack"
+
+-- Common
+Json = require "Common.json"
+LuaEnumModel = require "Common.LuaEnumModel"
+LuaGlobalData = require "Common.LuaGlobalData"
+LuaGlobalFuntcion = require "Common.LuaGlobalFunction"
+LuaProtocolCode = require "Common.LuaProtocolCode"
+
+-- LuaCore
+LuaMonoEvent = require "LuaCore.LuaMonoEvent"
+LuaMonoBehaviour = require "LuaCore.LuaMonoBehaviour"
+LuaMonoRegister = require "LuaCore.LuaMonoRegister"
+LuaMonoRequires = require "LuaCore.LuaMonoRequires"
+
+-- LuaManager
+LuaGlobalAssetsRegister = require "LuaManager.LuaGlobalAssetsRegister"
+LuaAssetsRegister = require "LuaManager.LuaAssetsRegister"
+LuaAssetsType = require "LuaManager.LuaAssetsType"
+LuaLoadAssets = require "LuaManager.LuaLoadAssets"
+LuaAssetsManager = require "LuaManager.LuaAssetsManager"
+LuaScenesManager = require "LuaManager.LuaScenesManager"
+LuaReceiveCSharpCallLuaManager = require "LuaManager.LuaReceiveCSharpCallLuaManager"
+
+-- LuaUIManager
+LuaUiEventListener = require "LuaUIManager.LuaUiEventListener"
+LuaUiPanelRegister = require "LuaUIManager.LuaUiPanelRegister"
+LuaUiRequires = require "LuaUIManager.LuaUiRequires"
+LuaUiPanelManager = require "LuaUIManager.LuaUiPanelManager"
+
+-- Handler
+-- Handler => Common
+-- Handler => Manager
+LuaServerMsgManager = require "Handler.Manager.LuaServerMsgManager"
+LuaSendManager = require "Handler.Manager.LuaSendManager"
+-- Handler => InitGame
+-- Handler => Login
+-- Handler => Main
+-- Handler => ShGame
+
+-- Module
+-- Module => Common
+-- Module => Logic
+-- Module => Logic => Common
+-- Module => Logic => Manager
+LuaSoundsManager = require "Module.Logic.Manager.LuaSoundsManager"
+-- Module => Logic => InitGame
+-- Module => Logic => Login
+-- Module => Logic => Main
+-- Module => Logic => ShGame
+-- Module => Ui => Common
+LuaAwait = require "Module.Ui.Common.LuaAwait"
+LuaMarquee = require "Module.Ui.Common.LuaMarquee"
+LuaResultCode = require "Module.Ui.Common.LuaResultCode"
+LuaSecondDialog = require "Module.Ui.Common.LuaSecondDialog"
+LuaThirdDialog = require "Module.Ui.Common.LuaThirdDialog"
+-- Module => Ui => UiComponentExtend
+UIButtonExtend = require "Module.Ui.UiComponentExtend.UIButtonExtend"
+-- Module => Ui => Manager
+LuaResultCodeManager = require "Module.Ui.Manager.LuaResultCodeManager"
+-- Module => Ui => InitGame
+-- Module => Ui => Login
+LuaLogin = require "Module.Ui.Login.LuaLogin"
+-- Module => Ui => Main
+-- Module => Ui => ShGame

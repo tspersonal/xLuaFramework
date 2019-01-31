@@ -1,0 +1,150 @@
+--[[
+    类型：模板module
+    功能：时间函数工具
+    描述：控制时间的与时间戳的函数工具
+]]
+local ToolTime = {}
+
+-- 分钟转为 return (table) { hour = x, minute = y}
+function ToolTime.MinuteToHourMinuteTable(minute)
+    if minute and minute >= 0 then
+        local tb = {}
+        tb.hour = math.floor(minute / 60)
+        tb.minute = math.floor(minute % 60)
+        return tb
+    end
+end
+
+-- 分钟转为 return (string) 1小时30分钟
+function ToolTime.MinuteToHourMinute(minute)
+    if minute and minute >= 0 then
+        local time = ToolTime.MinuteToHourMinuteTable(minute)
+        if (time.hour == 0 and time.minute == 0) then
+            return "不足1分钟"
+        else
+            return time.hour .. "小时" .. time.minute .. "分钟"
+        end
+    else
+        LuaLog.Log("ToolTime.MinuteToHourMinute ---> minute 为nil", LogType.Error)
+    end
+end
+
+-- 秒转为 return (table) { hour = x, minute = y, sencond = z}
+function ToolTime.SecondToHourMinuteTable(second)
+    if second and second >= 0 then
+        local tb = {}
+        tb.hour = math.floor(second / 3600)
+        tb.minute = math.floor((second / 60) % 60)
+        tb.second = math.floor((second % 60))
+        return tb
+    end
+end
+
+-- 秒转为 return (string) 1小时30分钟
+function ToolTime.SecondToHourMinute(second)
+    if second and second >= 0 then
+        local time = ToolTime.SecondToHourMinuteTable(second)
+        if (time.hour == 0 and time.minute == 0) then
+            return "不足1分钟"
+        else
+            return time.hour .. "小时" .. time.minute .. "分钟"
+        end
+    else
+        LuaLog.Log("ToolTime.SecondToHourMinute ---> second 为nil", LogType.Error)
+    end
+end
+
+-- 当前时间戳 return (number) 1654651132
+function ToolTime.CurrTimestamp()
+    return os.time()
+end
+
+-- 时间戳转日期 return (string) %Y%m%d%H%M%S
+function ToolTime.TimestampToDateTime(osTime, splitChar, type)
+    if osTime and osTime >= 0 then
+        local dateTime = CS.GameShare.DateTimeHelper.GetDateTimeFromGameBegin(osTime)
+        local time = ""
+        if (type == 6) then
+            time = "%04d" .. splitChar .. "%02d" .. splitChar .. "%02d " .. "%02d:%02d:%02d"
+        elseif (type == 5) then
+            time = "%04d" .. splitChar .. "%02d" .. splitChar .. "%02d " .. "%02d:%02d"
+        elseif (type == 3) then
+            time = "%04d" .. splitChar .. "%02d" .. splitChar .. "%02d "
+        else
+            LuaLog.Log("不存在时间戳类型", LogType.Error)
+        end
+        return string.format(
+            time,
+            dateTime.Year,
+            dateTime.Month,
+            dateTime.Day,
+            dateTime.Hour,
+            dateTime.Minute,
+            dateTime.Second
+        )
+    else
+        LuaLog.Log("时间戳为nil", LogType.Error)
+    end
+    --[[ -- 自带的方法
+    local time = ""
+    if (type == 6) then
+        time = "%Y" .. splitChar .. "%m" .. splitChar .. "%d " .. "%H:%M:%S"
+    elseif (type == 5) then
+        time = "%Y" .. splitChar .. "%m" .. splitChar .. "%d " .. "%H:%M"
+    elseif (type == 3) then
+        time = "%Y" .. splitChar .. "%m " .. splitChar .. "%d"
+    end
+    return os.date(time, osTime) ]]
+end
+
+-- 时间戳转成年月日接口 return (table) { year = y, month = m, day = d, hour = x, minute = y, sencond = z}
+function ToolTime.TimestampToDateTimeTable(osTime)
+    if osTime and osTime >= 0 then
+        local dateTime = CS.GameShare.DateTimeHelper.GetDateTimeFromGameBegin(osTime)
+        local tb = {
+            year = dateTime.Year,
+            month = dateTime.Month,
+            day = dateTime.Day,
+            hour = dateTime.Hour,
+            minute = dateTime.Minute,
+            second = dateTime.Second
+        }
+        return tb
+    else
+        LuaLog.Log("时间戳为nil", LogType.Error)
+    end
+    --[[ -- 自带的方法
+        if osTime and osTime >= 0 then
+        local tb = {}
+        tb.year = tonumber(os.date("%Y", osTime))
+        tb.month = tonumber(os.date("%m", osTime))
+        tb.day = tonumber(os.date("%d", osTime))
+        tb.hour = tonumber(os.date("%H", osTime))
+        tb.minute = tonumber(os.date("%M", osTime))
+        tb.second = tonumber(os.date("%S", osTime))
+        return tb
+    else
+        LuaLog.Log("时间戳为nil", LogType.Error)
+    end ]]
+end
+
+-- 日期转时间戳 return (number) 1654651132
+function ToolTime.DateToTimestamp(year, month, day, hour, minute, second)
+    return os.time(
+        {
+            year = year,
+            month = month,
+            day = day,
+            hour = hour,
+            minute = minute,
+            second = second
+        }
+    )
+end
+
+-- 秒数转为倒计时
+function ToolTime.SecondeToCountTime(secondes)
+    return CS.ToolsFunc.getTime(secondes)
+end
+
+return ToolTime

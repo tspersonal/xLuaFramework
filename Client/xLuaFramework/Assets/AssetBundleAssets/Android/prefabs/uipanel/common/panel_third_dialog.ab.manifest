@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 2979828123
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a53c2392f7d64775622904247a1693b4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e2aa0048b526e5d729852325865c3eda
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 75e7459110b9666449485c40f25362a5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Prefabs/Panel/Common/panel_third_dialog.prefab
+Dependencies:
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/fonts/my_fonts.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/atlas/my_atlas.ab

@@ -1,0 +1,56 @@
+--队列
+
+local Queue = {}
+
+--创建一个队列容器
+function Queue:New(o)
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+end
+
+function Queue:EnQueue(element)
+    table.insert(self, element) --插入队尾
+end
+
+function Queue:DeQueue()
+    if self:IsEmpty() then
+        print("Error: The Queue is empty.")
+        return
+    end
+    local value = self[1]
+    table.remove(self, 1) --从队尾取元素
+    return value
+end
+
+function Queue:Peek()
+    if self:IsEmpty() then
+        print("Error: The Queue is empty.")
+        return
+    end
+    return self[self:Count()]
+end
+
+function Queue:Clear()
+    local count = self:Count()
+    for i = count, 1, -1 do
+        table.remove(self)
+    end
+end
+
+function Queue:IsEmpty()
+    if self:Count() == 0 then
+        return true
+    end
+    return false
+end
+
+function Queue:Count()
+    local length = 0
+    for k, v in pairs(self) do
+        length = length + 1
+    end
+    return length
+end
+
+return Queue

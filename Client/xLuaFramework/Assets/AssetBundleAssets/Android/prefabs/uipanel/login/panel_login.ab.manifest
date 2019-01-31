@@ -1,0 +1,48 @@
+ManifestFileVersion: 0
+CRC: 3089192526
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0098369209d1a8aee902bcfc64066bf0
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1f026a0c73117213e0e4c3dcbf19a4cb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 858a20c1b21a3f94bb5b2d3b901c9aaf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ac5060295fbd39b4a88d20d0c83d925e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Prefabs/Panel/Login/panel_login.prefab
+Dependencies:
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/fonts/my_fonts.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/atlas/my_atlas.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/shaders/my_shaders.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/textures/common_textures.ab

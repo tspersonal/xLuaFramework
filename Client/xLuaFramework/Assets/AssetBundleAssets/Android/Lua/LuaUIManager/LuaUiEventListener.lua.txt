@@ -1,0 +1,291 @@
+--[[
+    功能：用于UI组建的监听事件
+    go：事件对象
+    luaFun：回调
+    soundType：ui音效类型
+]]
+local LuaUiEventListener = {}
+
+-- 绑定点击事件
+function LuaUiEventListener:OnClick(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定点击事件 OnClick 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定点击事件 OnClick 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onClick = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定双击事件
+function LuaUiEventListener:OnDoubleClick(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定双击事件 OnDoubleClick 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定点击事件 OnDoubleClick 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onDoubleClick = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定改变事件
+function LuaUiEventListener:OnChange(go, changeType, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定改变事件 OnChange 对象不存在", LogType.Error)
+    end
+    if (changeType == nil) then
+        LuaLog.Log("绑定改变事件 OnChange 类型不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定改变事件 OnChange 回调不存在", LogType.Error)
+    end
+    if (changeType == OnChangeType.None) then
+        return
+    elseif (changeType == OnChangeType.Input) then
+        -- 输入框
+        local inp = go:GetComponent(typeof(CS.UIInput))
+        if (inp == nil) then
+            LuaLog.Log("绑定改变事件 OnChange UIInput组件不存在", LogType.Error)
+        else
+            CS.EventDelegate.Add(
+                inp.onChange,
+                function()
+                    if (soundType ~= nil) then
+                        LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+                    end
+                    luaFun()
+                end
+            )
+        end
+    elseif (changeType == OnChangeType.ProgressBar) then
+        -- 进度条
+        local pro = go:GetComponent(typeof(CS.UIProgressBar))
+        if (pro == nil) then
+            LuaLog.Log("绑定改变事件 OnChange UIProgressBar组件不存在", LogType.Error)
+        else
+            CS.EventDelegate.Add(
+                pro.onChange,
+                function()
+                    if (soundType ~= nil) then
+                        LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+                    end
+                    luaFun()
+                end
+            )
+        end
+    elseif (changeType == OnChangeType.PopupList) then
+        -- 下拉框
+        local pop = go:GetComponent(typeof(CS.UIPopupList))
+        if (pop == nil) then
+            LuaLog.Log("绑定改变事件 OnChange UIPopupList组件不存在", LogType.Error)
+        else
+            CS.EventDelegate.Add(
+                pop.onChange,
+                function()
+                    if (soundType ~= nil) then
+                        LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+                    end
+                    luaFun()
+                end
+            )
+        end
+    elseif (changeType == OnChangeType.Toggle) then
+        -- 单选框
+        local tog = go:GetComponent(typeof(CS.UIToggle))
+        if (tog == nil) then
+            LuaLog.Log("绑定改变事件 OnChange UIToggle组件不存在", LogType.Error)
+        else
+            CS.EventDelegate.Add(
+                tog.onChange,
+                function()
+                    if (soundType ~= nil) then
+                        LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+                    end
+                    luaFun()
+                end
+            )
+        end
+    elseif (changeType == OnChangeType.Widget) then
+    end
+end
+
+-- 绑定提交事件
+function LuaUiEventListener:OnSubmit(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定提交事件 OnSubmit 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定提交事件 OnSubmit 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onSubmit = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定停留事件
+function LuaUiEventListener:OnHover(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定停留事件 OnHover 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定停留事件 OnHover 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onHover = function(obj, isHover)
+        if (isHover) then
+            if (soundType ~= nil) then
+                LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+            end
+        else
+        end
+        luaFun(obj, isHover)
+    end
+end
+
+-- 绑定按压事件
+function LuaUiEventListener:OnPress(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定按压事件 OnPress 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定按压事件 OnPress 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onPress = function(obj, isPress)
+        if (isPress) then
+            if (soundType ~= nil) then
+                LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+            end
+        else
+        end
+        luaFun(obj, isPress)
+    end
+end
+
+-- 绑定选中事件
+function LuaUiEventListener:OnSelect(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定选中事件 OnSelect 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定选中事件 OnSelect 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onSelect = function(obj, isSelect)
+        if (isSelect) then
+            if (soundType ~= nil) then
+                LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+            end
+        else
+        end
+        luaFun(obj, isSelect)
+    end
+end
+
+-- 绑定滑动事件
+function LuaUiEventListener:OnScroll(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定滑动事件 OnScroll 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定滑动事件 OnScroll 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onScroll = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定开始拖动事件
+function LuaUiEventListener:OnDragStart(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定开始拖动事件 OnDragStart 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定开始拖动事件 OnDragStart 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onDragStart = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定拖动中事件
+function LuaUiEventListener:OnDrag(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定拖动中事件 OnDrag 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定拖动中事件 OnDrag 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onDrag = function(obj, delta)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj, delta)
+    end
+end
+
+-- 绑定结束拖动事件
+function LuaUiEventListener:OnDragEnd(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定结束拖动事件 OnDragEnd 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定结束拖动事件 OnDragEnd 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onDragEnd = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定松开拖动事件
+function LuaUiEventListener:OnDrop(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定松开拖动事件 OnDrop 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定松开拖动事件 OnDrop 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onDrop = function(obj)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj)
+    end
+end
+
+-- 绑定按下键盘事件
+function LuaUiEventListener:OnKey(go, luaFun, soundType)
+    if (go == nil) then
+        LuaLog.Log("绑定按下键盘事件 OnKey 对象不存在", LogType.Error)
+    end
+    if (luaFun == nil) then
+        LuaLog.Log("绑定按下键盘事件 OnKey 回调不存在", LogType.Error)
+    end
+    CS.UIEventListener.Get(go).onKey = function(obj, keyCode)
+        if (soundType ~= nil) then
+            LuaMonoRequires[LuaMonoRegister.SoundsManager]:PlaySoundForUi(soundType, true)
+        end
+        luaFun(obj, keyCode)
+    end
+end
+
+return LuaUiEventListener

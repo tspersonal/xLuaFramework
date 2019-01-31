@@ -1,0 +1,112 @@
+--[[
+    功能：全局方法
+]]
+local LuaGlobalFuntcion = {}
+
+-- 添加全局组件
+function LuaGlobalFuntcion:AddGlobalComponent()
+    -- 添加计时器组件
+    LuaLog.Log("添加全局组件 AddGlobalComponent", LogType.Critical)
+    local gameManager = CS.GameManager.Instance.gameObject
+    local thirdPartyManager = CS.ThirdPartyManager.Instance.gameObject
+    -- 添加计时器组件
+    LuaLog.Log("添加计时器组件 TimerCount", LogType.Normal)
+    CS.TimerCount.Start()
+    if (gameManager ~= nil) then
+        -- 添加声音管理组件
+        LuaLog.Log("添加声音管理组件 LuaSoundsManager => LuaMonoBehaviour", LogType.Normal)
+        local soundesManager = CS.UnityEngine.GameObject("LuaSoundsManager")
+        soundesManager.transform:SetParent(gameManager.transform, false)
+        soundesManager.transform.localScale = CS.UnityEngine.Vector3.one
+        soundesManager.transform.localPosition = CS.UnityEngine.Vector3.zero
+
+        -- 设置组件对应的脚本数据
+        local mono = LuaMonoRequires[LuaMonoRegister.SoundsManager]
+        if (mono ~= nil) then
+            mono:Create(soundesManager)
+        else
+            LuaLog.Log("AddGlobalComponent 绑定Mono失败：LuaSoundsManager", LogType.Error)
+        end
+    end
+    if (thirdPartyManager ~= nil) then
+        -- 添加各平台返回组件
+        LuaLog.Log("添加Yz插件回调返回组件 YzResultHelper", LogType.Normal)
+        thirdPartyManager:AddComponent(typeof(CS.YzResultHelper))
+    end
+end
+
+-- 更新服务器配置
+function LuaGlobalFuntcion:UpdateServerConfig()
+    LuaLog.Log("更新服务器配置 UpdateServerConfig", LogType.Critical)
+    local gameManager = CS.GameManager.Instance.gameObject
+    local logHelper = gameManager:GetComponent(typeof(CS.LogHelper))
+    -- 是否打开客户端日志
+    if (CS.ServerInfo.Data.ClientLogOpened) then
+        LuaLog.Log("UpdateServerConfig 打开Log日志", LogType.Normal)
+        if (logHelper == nil) then
+            -- gameManager:AddComponent(typeof(CS.DebugerHandler))
+        else
+            gameManager.enabled = false
+        end
+    else
+        LuaLog.Log("UpdateServerConfig 关闭Log日志", LogType.Normal)
+        if (logHelper ~= nil) then
+            gameManager.enabled = false
+        end
+    end
+    -- 是否打开Reporter的Log日志
+    local reporter = CS.UnityEngine.GameObject.Find("Reporter")
+    if (reporter ~= nil) then
+        reporter:SetActive(CS.ServerInfo.Data.ClientLogOpened)
+    end
+    -- 是否打开控制台Log日志
+    CS.Debuger.DebugerHelper.IsOpenLog = CS.ServerInfo.Data.ClientLogOpened
+    CS.Debuger.DebugerHelper.IsOpenLogTime = not CS.ServerInfo.Data.ClientLogOpened
+end
+
+-- 打开冒泡提示 因为经常会用到
+function LuaGlobalFuntcion:ShowDialog(str)
+    if (LuaUiPanelManager:HasOpenView(LuaUiPanelRegister.ResultCode)) then
+        LuaUiRequires[LuaUiPanelRegister.ResultCode.AssetName]:LuaDoSetData(str)
+    else
+        LuaUiPanelManager:ShowUiPanelNone(LuaUiPanelRegister.ResultCode, str, true)
+    end
+end
+
+-- 打开等待界面 更新进度
+function LuaGlobalFuntcion:ShowAwaitProgress(progress)
+    if (LuaUiPanelManager:HasOpenView(LuaUiPanelRegister.Await)) then
+        LuaUiRequires[LuaUiPanelRegister.Await.AssetName]:LuaDoSetData(progress)
+    else
+        LuaUiPanelManager:ShowUiPanelNone(LuaUiPanelRegister.Await, progress, true)
+    end
+end
+
+-- 打开跑马灯 更新跑马灯内容
+function LuaGlobalFuntcion:ShowMarquee(str)
+    if (LuaUiPanelManager:HasOpenView(LuaUiPanelRegister.Marquee)) then
+        LuaUiRequires[LuaUiPanelRegister.Marquee.AssetName]:LuaDoSetData(str)
+    else
+        LuaUiPanelManager:ShowUiPanelFadeInToOut(LuaUiPanelRegister.Marquee, str, true)
+    end
+end
+
+-- 打开三级弹窗 用于服务器引起的提示
+function LuaGlobalFuntcion:ShowThirdDialog(data)
+    if (LuaUiPanelManager:HasOpenView(LuaUiPanelRegister.ThirdDialog)) then
+        LuaUiRequires[LuaUiPanelRegister.ThirdDialog.AssetName]:LuaDoSetData(data)
+    else
+        LuaUiPanelManager:ShowUiPanelMinToMax(LuaUiPanelRegister.ThirdDialog, data, true, -1, "Base")
+    end
+end
+
+-- 打开二级弹窗 用于客户端引起的提示
+function LuaGlobalFuntcion:ShowSecondDialog(dialogData)
+    if (LuaUiPanelManager:HasOpenView(LuaUiPanelRegister.SecondDialog)) then
+        LuaUiRequires[LuaUiPanelRegister.SecondDialog.AssetName]:LuaDoSetData(dialogData)
+    else
+        LuaUiPanelManager:ShowUiPanelMinToMax(LuaUiPanelRegister.SecondDialog, dialogData, true, -1, "Base")
+    end
+end
+
+return LuaGlobalFuntcion

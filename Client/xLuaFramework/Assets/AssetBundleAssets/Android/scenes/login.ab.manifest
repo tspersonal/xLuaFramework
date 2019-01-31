@@ -1,0 +1,14 @@
+ManifestFileVersion: 0
+CRC: 1443872324
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 858208e95d7186a332195b43056cf9fe
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
+HashAppended: 0
+ClassTypes: []
+Assets:
+- Assets/MyAssets/Scenes/02_Login.unity
+Dependencies: []

@@ -1,0 +1,159 @@
+--[[
+    功能：资源管理
+]]
+local LuaAssetsManager = {}
+
+-- 图集AssetBundle
+LuaAssetsManager.AtlasAbAsset = {
+    AssetName = nil,
+    AssetBundle = nil
+}
+-- 字体AssetBundle
+LuaAssetsManager.FontsAbAsset = {
+    Hwht = {
+        AssetName = nil,
+        AssetBundle = nil
+    }
+}
+-- 着色器AssetBundle
+LuaAssetsManager.ShadersAbAsset = {
+    MyShaders = {
+        AssetName = nil,
+        AssetBundle = nil
+    },
+    MaskShader = {
+        AssetName = nil,
+        AssetBundle = nil
+    }
+}
+-- 所有的需要加载的资源计数
+local _nAllAbCount = 0
+-- 已经加载的资源计数
+local _nLoadedAbCount = 0
+
+-- 加载资源完成
+local function OnLoadComplete()
+    LuaLog.Log("加载全局资源进度: " .. _nLoadedAbCount .. "/" .. _nAllAbCount, LogType.Critical)
+    if (_nLoadedAbCount == _nAllAbCount) then
+        -- 在GameManager中添加全局组件
+        LuaGlobalFuntcion:AddGlobalComponent()
+        -- 更新服务器配置
+        LuaGlobalFuntcion:UpdateServerConfig()
+        -- 加载全局资源完毕，切换到登录场景
+        LuaLog.Log("加载全局资源完毕，切换到登录场景 LuaAssetsManager:LoadGlobalAssets", LogType.Critical)
+        LuaScenesManager:LoadScene(LuaAssetsType.ScenesType.Login)
+    end
+end
+
+--[[ 游戏开始 加载全局资源 包括 图集、字体、着色器 不需Resources加载
+    如果需要保存资源，最好做下区分下载
+    如果不需要的话，可以使用递归下载
+    目前层级结构只有2层 ]]
+function LuaAssetsManager:LoadGlobalAssets()
+    _nAllAbCount = 0
+    _nLoadedAbCount = 0
+    local loadType = CS.LocalData.LoadAssetsType
+    if (loadType == LoadAssetsType.Resources) then
+        OnLoadComplete()
+        return
+    end
+    --计数
+    for k, v in pairs(LuaGlobalAssetsRegister) do
+        if (v.BTheSamePath) then
+            -- BTheSamePath = true 加载一个AB包即可
+            _nAllAbCount = _nAllAbCount + 1
+        else
+            -- BTheSamePath = false 加载根据子对象加载AB包
+            for k1, v1 in pairs(v) do
+                if (k1 ~= "BTheSamePath") then
+                    _nAllAbCount = _nAllAbCount + 1
+                end
+            end
+        end
+    end
+    -- 加载
+    for k, v in pairs(LuaGlobalAssetsRegister) do
+        if (v.BTheSamePath) then
+            -- BTheSamePath = true 加载一个AB包即可
+            local OnLoad = function(asset)
+                _nLoadedAbCount = _nLoadedAbCount + 1
+                OnLoadComplete()
+                if (k == "Atlas") then
+                    self.AtlasAbAsset.AssetName = v.AssetName
+                    self.AtlasAbAsset.AssetBundle = asset
+                --[[ for k1,v1 in pairs(v.AssetName) do
+                        -- 看需要是否需要加载图集
+                    end ]]
+                end
+            end
+            LuaLoadAssets:LoadAssetAsync(v.AssetBundleName, v.AssetBundlePath, ResType.None, nil, OnLoad)
+        else
+            -- BTheSamePath = false 加载根据子对象加载AB包
+            for k1, v1 in pairs(v) do
+                if (k1 ~= "BTheSamePath") then
+                    local OnLoad = function(asset)
+                        _nLoadedAbCount = _nLoadedAbCount + 1
+                        OnLoadComplete()
+                        if (k == "Fonts") then
+                            if (k1 == "Hwht") then
+                                self.FontsAbAsset.Hwht.AssetName = v1.AssetName
+                                self.FontsAbAsset.Hwht.AssetBundle = asset
+                            end
+                        elseif (k == "Shaders") then
+                            if (k1 == "MyShaders") then
+                                self.ShadersAbAsset.MyShaders.AssetName = v1.AssetName
+                                self.ShadersAbAsset.MyShaders.AssetBundle = asset
+                            elseif (k1 == "MaskShader") then
+                                self.ShadersAbAsset.MaskShader.AssetName = v1.AssetName
+                                self.ShadersAbAsset.MaskShader.AssetBundle = asset
+                            end
+                        end
+                    end
+                    LuaLoadAssets:LoadAssetAsync(v1.AssetBundleName, v1.AssetBundlePath, ResType.None, nil, OnLoad)
+                end
+            end
+        end
+    end
+end
+
+-- 获取默认头像
+function LuaAssetsManager:GetDefaultHead(sAssetName, luaFun)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = sAssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = LuaAssetsRegister.Textures.DefaultHead.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = LuaAssetsRegister.Textures.DefaultHead.AssetBundlePath
+    end
+    local OnLoad = function(texture)
+        -- 加载完成
+        if (texture == nil or luaFun == nil) then
+            return
+        end
+        luaFun(texture)
+    end
+    LuaLoadAssets:LoadTexture2DAsync(sAssetName, LuaAssetsRegister.Textures.DefaultHead.AssetBundleName, path, OnLoad)
+end
+
+-- 获取桌布
+function LuaAssetsManager:GetGameBg(sAssetName, luaFun)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = sAssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = LuaAssetsRegister.Textures.GameBg.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = LuaAssetsRegister.Textures.GameBg.AssetBundlePath
+    end
+    local OnLoad = function(texture)
+        -- 加载完成
+        if (texture == nil or luaFun == nil) then
+            return
+        end
+        luaFun(texture)
+    end
+    LuaLoadAssets:LoadTexture2DAsync(sAssetName, LuaAssetsRegister.Textures.GameBg.AssetBundleName, path, OnLoad)
+end
+
+return LuaAssetsManager

@@ -1,0 +1,116 @@
+--[[ 接收服务器返回数据 ]]
+OnReceiveServerMsg = function(cmd, jsonString)
+    --接收服务器消息
+    LuaServerMsgManager:OnServerMsg(cmd, jsonString)
+end
+
+--[[ 服务器连接成功 ]]
+OnConnectServerSucceed =
+    function()
+    -- 判断应该怎么处理
+    local currProcess = ConnectServerSucceedType.None
+
+    if (LuaScenesManager.CurrentScene == LuaAssetsType.ScenesType.InitGame) then
+        -- 初始化场景
+        currProcess = ConnectServerSucceedType.LoadAssets
+    elseif (LuaScenesManager.CurrentScene == LuaAssetsType.ScenesType.Login) then
+        -- 登录场景
+        currProcess = ConnectServerSucceedType.None
+    elseif (LuaScenesManager.CurrentScene == LuaAssetsType.ScenesType.Main) then
+        -- 主场景
+        if (LuaGlobalData.Player ~= nil and LuaGlobalData.Player.isLogout and not (CS.LocalData.isOtherLogin)) then
+            currProcess = ConnectServerSucceedType.Logout
+        else
+            currProcess = ConnectServerSucceedType.ReLogin
+        end
+    elseif (LuaScenesManager.CurrentScene == LuaAssetsType.ScenesType.Game) then
+        -- 德扑游戏场景
+        if (LuaGlobalData.Player ~= nil and LuaGlobalData.Player.isLogout and not (CS.LocalData.isOtherLogin)) then
+            currProcess = ConnectServerSucceedType.Logout
+        else
+            currProcess = ConnectServerSucceedType.ReLogin
+        end
+    end
+
+    -- 处理
+    if (currProcess == ConnectServerSucceedType.None) then
+        LuaLog.Log("连接服务器成功，当前场景【" .. LuaScenesManager.CurrentScene.AssetName .. "】处理：无", LogType.Critical)
+    elseif (currProcess == ConnectServerSucceedType.LoadAssets) then
+        LuaLog.Log("连接服务器成功，当前场景【" .. LuaScenesManager.CurrentScene.AssetName .. "】处理：加载全局AB资源 + 更新服务器配置", LogType.Critical)
+        -- 加载所有的全局AB资源
+        LuaAssetsManager:LoadGlobalAssets()
+    elseif (currProcess == ConnectServerSucceedType.ReLogin) then
+        LuaLog.Log("连接服务器成功，当前场景【" .. LuaScenesManager.CurrentScene.AssetName .. "】处理：重新登录", LogType.Critical)
+        local sendData = {
+            Account = CS.LocalData.GamePhone,
+            Password = CS.LocalData.GamePassword,
+            DeviceToken = "DeviceToken"
+        }
+        LuaSendManager:SendMsg(opCodes.Client_Character_Login, sendData)
+    elseif (currProcess == ConnectServerSucceedType.Logout) then
+        LuaLog.Log("连接服务器成功，当前场景【" .. LuaScenesManager.CurrentScene.AssetName .. "】处理：注销账号", LogType.Critical)
+        LuaScenesManager:LoadScene(LuaAssetsType.ScenesType.Login)
+    end
+end
+
+--[[ 获取服务器配置 ]]
+onServerConfig = function(jsonString)
+    LuaLog.Log(jsonString, LogType.Info)
+    serverData = json.decode(jsonString)
+end
+
+--[[ 授权成功 ]]
+OnAuthHandler = function(state)
+    if state == 1 then
+        -- 成功
+    elseif state == 2 then
+        -- 失败
+    elseif state == 3 then
+    -- 取消
+    end
+end
+
+--[[ 获取授权信息 ]]
+OnShowUserHandler =
+    function(state, jsonString)
+    if state == ResponseState.Success then
+        local data = json.decode(jsonString)
+        CS.LocalData.openID = data.openid
+        CS.LocalData.nickName = data.nickname
+        CS.LocalData.headID = data.headimgurl
+        CS.LocalData.sex = data.sex
+        local sendData = {
+            player = {
+                name = CS.LocalData.openID,
+                otherName = CS.LocalData.nickName,
+                headID = CS.LocalData.headID,
+                sex = CS.LocalData.sex
+            }
+        }
+        LuaSendManager:SendMsg(opCodes.Client_Character_Create, sendData)
+    elseif state == ResponseState.Fail then
+    elseif state == ResponseState.Cancel then
+    end
+end
+
+--[[ 分享回调 ]]
+OnShareHandler = function(state)
+    if state == 1 then
+        -- 成功
+    elseif state == 2 then
+        -- 失败
+    elseif state == 3 then
+    -- 取消
+    end
+end
+
+--[[ 启动加载资源完毕 ]]
+OnLoadAbComplete = function()
+    LuaLog.Log("AB资源全部加载完成，进入登录场景", LogType.Critical)
+    LuaScenesManager:LoadScene(LuaAssetsType.ScenesType.Login)
+end
+
+--[[ 加载场景完成 ]]
+OnLoadSceneComplete = function(sceneName)
+    LuaScenesManager:OnLoadSceneComplete(sceneName)
+end

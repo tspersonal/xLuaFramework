@@ -1,0 +1,47 @@
+--[[
+    功能：控制冒泡弹窗
+]]
+local LuaResultCode = LuaUiBase:New()
+
+LuaResultCode.Name = LuaUiPanelRegister.ResultCode.AssetName
+
+-- 当前返回码
+LuaResultCode.ResultCodeData = nil
+
+local _labContent = nil
+local _twAlpha = nil
+
+-- 显示消息
+local function ShowResultCode(data)
+    _labContent.text = data
+    _twAlpha:ResetToBeginning()
+    _twAlpha:PlayForward()
+    _twAlpha:SetOnFinished(
+        function()
+            LuaUiPanelManager:HideUiPanel(LuaUiPanelRegister.ResultCode, false)
+        end
+    )
+end
+
+function LuaResultCode:DoAwake()
+    _labContent = self.Root.transform:Find("LabContent"):GetComponent(typeof(CS.UILabel))
+    _twAlpha = self.Root:GetComponent(typeof(CS.TweenAlpha))
+end
+
+function LuaResultCode:DoSetData(data)
+    if (data ~= nil) then
+        LuaResultCode.ResultCodeData = data
+        if (LuaResultCode.IsActive) then
+            ShowResultCode(data)
+        end
+    end
+end
+
+function LuaResultCode:DoOnEnable()
+    if (LuaResultCode.ResultCodeData == nil) then
+        LuaResultCode.ResultCodeData = ""
+    end
+    ShowResultCode(LuaResultCode.ResultCodeData)
+end
+
+return LuaResultCode

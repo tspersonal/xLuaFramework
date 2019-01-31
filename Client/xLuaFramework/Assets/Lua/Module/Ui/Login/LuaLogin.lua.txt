@@ -1,0 +1,95 @@
+--[[
+    功能：登录控制
+]]
+local LuaLogin = {}
+
+-- 覆盖父类的New方法
+function LuaLogin:New(o)
+    local base = LuaUiBase:New()
+    local base_mt = getmetatable(base)
+    -- 当方法在子类中查询不到时，再去父类中去查找。
+    setmetatable(LuaLogin, base_mt)
+    -- 这样设置后，可以通过self.Base.method(self, ...) 调用父类的已被覆盖的方法。
+    base.Base = setmetatable({}, base_mt)
+    return setmetatable(base, {__index = LuaLogin})
+end
+
+-- 调用自己的New方法，保留父类的原功能到Base中，可以在子类中覆盖重名方法扩展新功能
+LuaLogin = LuaLogin:New()
+
+LuaLogin.Name = LuaUiPanelRegister.Login.AssetName
+
+local _base
+local _btnLogin
+local _btnResetPassword
+local _btnRegister
+
+local function OnClickBtn(go)
+    if (go.name == _btnLogin.name) then
+        LuaLogin:Test()
+        -- 点击登录
+        local dialogData = {
+            DialogType = SecondDialogType.LogoutAccount,
+            Title = "提示",
+            Desc = "是否记住密码",
+            Confirm = "是(T)",
+            Cancel = "否(F)"
+        }
+        LuaGlobalFuntcion:ShowSecondDialog(dialogData)
+    elseif (go.name == _btnResetPassword.name) then
+        -- LuaGlobalFuntcion:ShowDialog("忘记密码")
+        -- 点击忘记密码
+        local dialogData = {
+            DialogType = ThirdDialogType.LogoutAccount,
+            Title = "提 示",
+            Desc = "是否忘记密码",
+            Confirm = "是 (T)",
+            Cancel = "否 (F)"
+        }
+        LuaGlobalFuntcion:ShowThirdDialog(dialogData)
+    elseif (go.name == _btnRegister.name) then
+        -- 点击注册
+        local dialogData = {
+            DialogType = ThirdDialogType.LogoutAccount,
+            Title = "提 示",
+            Desc = "是否注册",
+            Confirm = "是 (T)",
+            Cancel = "否 (F)"
+        }
+        LuaGlobalFuntcion:ShowThirdDialog(dialogData)
+    -- LuaGlobalFuntcion:ShowDialog("注册")
+    end
+end
+
+function LuaLogin:DoAwake()
+    _base = LuaLogin.Root.transform:Find("Base")
+    _btnLogin = _base:Find("BtnLogin").gameObject
+    _btnResetPassword = _base:Find("BtnResetPassword").gameObject
+    _btnRegister = _base:Find("BtnRegister").gameObject
+end
+
+function LuaLogin:DoRegister()
+    LuaUiEventListener:OnClick(_btnLogin, OnClickBtn, LuaAssetsType.SoundsType.Button)
+    LuaUiEventListener:OnClick(_btnResetPassword, OnClickBtn, LuaAssetsType.SoundsType.Button)
+    LuaUiEventListener:OnClick(_btnRegister, OnClickBtn, LuaAssetsType.SoundsType.Button)
+end
+
+function LuaLogin:DoOnEnable()
+end
+
+function LuaLogin:DoStart()
+end
+
+function LuaLogin:DoOnDisable()
+end
+
+function LuaLogin:DoTweenComplete()
+    LuaGlobalFuntcion:ShowMarquee("抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。")
+end
+
+function LuaLogin:Test()
+    self.Base:Test()
+    LuaLog.Log("LuaLogin => Name => " .. self.Name)
+end
+
+return LuaLogin

@@ -1,0 +1,53 @@
+--[[
+    功能：场景管理
+]]
+local LuaScenesManager = {}
+
+LuaScenesManager.CurrentScene = LuaAssetsType.ScenesType.InitGame
+
+-- 加载场景完成
+function LuaScenesManager:OnLoadSceneComplete(sceneName)
+    LuaLog.Log("加载场景完成: " .. sceneName, LogType.Debug)
+    -- 清空计时器
+    CS.TimerCount.DestroyAll()
+    -- 清空界面缓存
+    LuaUiPanelManager:ClearData()
+
+    if (sceneName == LuaAssetsType.ScenesType.Login.AssetName) then
+        LuaScenesManager.CurrentScene = LuaAssetsType.ScenesType.Login
+        LuaUiPanelManager:ShowUiPanelFadeInToOut(LuaUiPanelRegister.Login)
+    elseif (sceneName == LuaAssetsType.ScenesType.Main.AssetName) then
+        LuaScenesManager.CurrentScene = LuaAssetsType.ScenesType.Main
+    elseif (sceneName == LuaAssetsType.ScenesType.Game.AssetName) then
+        LuaScenesManager.CurrentScene = LuaAssetsType.ScenesType.Game
+    end
+end
+
+-- 加载场景
+function LuaScenesManager:LoadScene(sceneType)
+    -- LuaGlobalFuntcion:ShowAwaitProgress(-1)
+
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = sceneType.AssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = sceneType.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = sceneType.AssetBundlePath
+    end
+    local OnLoad = function(scene)
+        -- 加载完成
+        if (scene == nil) then
+            return
+        end
+        local sceneAsync = CS.UnityEngine.SceneManagement.SceneManager.LoadScene(sceneType.AssetName)
+    end
+    if (loadType == LoadAssetsType.Resources) then
+        -- LuaLoadAssets:LoadAssetAsync(sceneType.AssetName, path, ResType.None, nil, OnLoad)
+        CS.UnityEngine.SceneManagement.SceneManager.LoadScene(sceneType.AssetName)
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        LuaLoadAssets:LoadAssetAsync(sceneType.AssetBundleName, path, ResType.None, nil, OnLoad)
+    end
+end
+
+return LuaScenesManager

@@ -1,0 +1,164 @@
+--[[
+    功能：注册实时加载的资源类型
+]]
+local LuaAssetsRegister = {
+    -- 场景 不需Awake加载 Scenes中使用
+    Scenes = {
+        BTheSamePath = false,
+        -- 登录场景
+        InitGame = {
+            BTheSamePath = true,
+            AssetBundleName = "",
+            AssetBundlePath = "",
+            ResourcesPath = "",
+            AssetName = {InitGame = "01_InitGame"}
+        },
+        Login = {
+            BTheSamePath = true,
+            AssetBundleName = "login",
+            AssetBundlePath = "scenes/login.ab",
+            ResourcesPath = "",
+            AssetName = {Login = "02_Login"}
+        },
+        -- 主场景
+        Main = {
+            BTheSamePath = true,
+            AssetBundleName = "main",
+            AssetBundlePath = "scenes/main.ab",
+            ResourcesPath = "",
+            AssetName = {Main = "03_Main"}
+        },
+        -- 游戏场景
+        Game = {
+            BTheSamePath = true,
+            AssetBundleName = "game",
+            AssetBundlePath = "scenes/game.ab",
+            ResourcesPath = "",
+            AssetName = {Game = "04_Game"}
+        }
+    },
+    -- 声音 不需Awake加载 SoundsManager中使用
+    Sounds = {
+        BTheSamePath = false,
+        -- 背景音乐
+        GameBgSounds = {
+            BTheSamePath = true,
+            AssetBundleName = "game_bg_sounds",
+            AssetBundlePath = "sounds/game_bg_sounds.ab",
+            ResourcesPath = "Sounds/GameBgSounds/",
+            AssetName = {
+                MainBgSound = "MainBgSound",
+                GameBgSound = "GameBgSound"
+            }
+        },
+        -- Ui音效
+        UiSounds = {
+            BTheSamePath = true,
+            AssetBundleName = "ui_sounds",
+            AssetBundlePath = "sounds/ui_sounds.ab",
+            ResourcesPath = "Sounds/UiSounds/",
+            AssetName = {
+                Button = "Button"
+            }
+        },
+        -- 特效音效
+        EffectSounds = {
+            BTheSamePath = true,
+            AssetBundleName = "effect_sounds",
+            AssetBundlePath = "sounds/effect_sounds.ab",
+            ResourcesPath = "Sounds/EffectSounds/",
+            AssetName = {
+                Win = "Win"
+            }
+        },
+        -- 表情音效
+        FaceSounds = {
+            BTheSamePath = true,
+            AssetBundleName = "face_sounds",
+            AssetBundlePath = "sounds/face_sounds.ab",
+            ResourcesPath = "Sounds/FaceSounds/",
+            AssetName = {
+                Face2001 = "2001",
+                Face2002 = "2002",
+                Face2003 = "2003",
+                Face2004 = "2004",
+                Face2005 = "2005",
+                Face2006 = "2006",
+                Face2007 = "2007",
+                Face2008 = "2008",
+                Face2009 = "2009",
+                Face2010 = "2010",
+                Face2011 = "2011"
+            }
+        },
+        -- 游戏音效
+        GameSounds = {
+            BTheSamePath = true,
+            AssetBundleName = "game_sounds",
+            AssetBundlePath = "sounds/game_sounds.ab",
+            ResourcesPath = "Sounds/GameSounds/",
+            AssetName = {
+                Seating = "Seating",
+                Standup = "StandUp"
+            }
+        }
+    },
+    -- 纹理 不需Awake加载 LuaAssetsManager使用
+    Textures = {
+        BTheSamePath = false,
+        -- 公共纹理
+        CommonTextures = {
+            BTheSamePath = true,
+            AssetBundleName = "common_textures",
+            AssetBundlePath = "textures/common_textures.ab",
+            ResourcesPath = "Textures/CommonTextures/",
+            AssetName = {
+                BgPanel = "BgPanel",
+                RoundedRectangle = "RoundedRectangle",
+            }
+        },
+        -- 默认头像
+        DefaultHead = {
+            BTheSamePath = true,
+            AssetBundleName = "default_head",
+            AssetBundlePath = "textures/default_head.ab",
+            ResourcesPath = "Textures/DefaultHead/",
+            AssetName = {
+                PlayerHead = "PlayerHead",
+                ClubHead = "ClubHead",
+                UnionHead = "UnionHead",
+                EmptySeatHead = "EmptySeatHead"
+            }
+        },
+        -- 桌布
+        GameBg = {
+            BTheSamePath = true,
+            AssetBundleName = "game_bg",
+            AssetBundlePath = "textures/game_bg.ab",
+            ResourcesPath = "Textures/GameBg/",
+            AssetName = {
+                GameBg1 = "game_bg_1",
+                GameBg2 = "game_bg_2",
+                GameBg3 = "game_bg_3"
+            }
+        }
+    },
+    -- 材质 不需Awake加载 LuaAssetsManager使用
+    Materials = {
+        BTheSamePath = false,
+        -- Shader 对应材质
+        ShaderMaterials = {
+            BTheSamePath = true,
+            AssetBundleName = "shader_materials",
+            AssetBundlePath = "materials/shader_materials.ab",
+            ResourcesPath = "Materials/ShaderMaterials/",
+            AssetName = {
+                ColoredGray = "ColoredGray",
+                CricleMask = "CricleMask",
+                RoundedRectangleMask = "RoundedRectangleMask",
+            }
+        },
+    }
+}
+
+return LuaAssetsRegister

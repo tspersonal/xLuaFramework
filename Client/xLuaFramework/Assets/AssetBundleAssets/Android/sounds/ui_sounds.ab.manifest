@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2179104430
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f0343b3c111f8a9d8cf5c0b8b5be3b88
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Sounds/UiSounds/Button.ogg
+Dependencies: []

@@ -1,0 +1,45 @@
+--[[
+    功能：等待响应
+]]
+local LuaAwait = require "LuaUIManager.LuaUiBase":New()
+
+LuaAwait.Name = LuaUiPanelRegister.Await.AssetName
+
+-- 当前等待数据
+LuaAwait.AwaitData = nil
+
+-- 进度文本
+local _labProgress
+
+-- 显示进度
+local function ShowAwait(data)
+    if (data == -1) then
+        _labProgress.gameObject:SetActive(false)
+    else
+        _labProgress.gameObject:SetActive(true)
+        _labProgress.text = ToolMath:NumberToPercent(data, 1)
+    end
+end
+
+function LuaAwait:DoAwake()
+    local base = self.Root.transform:Find("Base")
+    _labProgress = base:Find("LabProgress"):GetComponent(typeof(CS.UILabel))
+end
+
+function LuaAwait:DoSetData(data)
+    if (data ~= nil) then
+        LuaAwait.AwaitData = data
+        if (LuaAwait.IsActive) then
+            ShowAwait(data)
+        end
+    end
+end
+
+function LuaAwait:DoOnEnable()
+    if (LuaAwait.AwaitData == nil) then
+        LuaAwait.AwaitData = -1
+    end
+    ShowAwait(LuaAwait.AwaitData)
+end
+
+return LuaAwait

@@ -1,0 +1,47 @@
+--[[
+    功能：全局数据
+]]
+local LuaGlobalData = {}
+-- 颜色数据
+LuaGlobalData.MyColor = {
+    -- 黄色 E5AF52FF 229 175 82
+    ColYellow = CS.UnityEngine.Color(229 / 255, 175 / 255, 82 / 255, 1),
+    -- 绿色 589D3A 88 157 58
+    ColGreen = CS.UnityEngine.Color(88 / 255, 157 / 255, 58 / 255, 1),
+    -- 蓝色 36A5E4FF 74 129 240
+    ColBlue = CS.UnityEngine.Color(74 / 255, 129 / 255, 240 / 255, 1),
+    -- 青绿色 2ABAB0FF 42 186 176
+    ColDarkGreen = CS.UnityEngine.Color(42 / 255, 186 / 255, 176 / 255, 1),
+    -- 红色 DE4040FF 222 64 64
+    ColRed = CS.UnityEngine.Color(222 / 255, 64 / 255, 64 / 255, 1),
+    -- 灰色 9A9A9A 154 154 154
+    ColGrey = CS.UnityEngine.Color(154 / 255, 154 / 255, 154 / 255, 1),
+    -- 黑色 434343FF 67 67 67
+    ColBlack = CS.UnityEngine.Color(67 / 255, 67 / 255, 67 / 255, 1),
+    -- 紫色 8E65AFFF 142 101 175
+    ColViolet = CS.UnityEngine.Color(142 / 255, 101 / 255, 175 / 255, 1)
+}
+-- 玩家数据
+LuaGlobalData.Player = {}
+-- 服务器配置
+LuaGlobalData.ServerConfig = {
+    -- 服务器更新信息
+    ServerUpdateMessage = "",
+    -- 客服微信
+    ServerWeChat = "",
+    -- 客服QQ
+    ServerQq = "",
+    -- 通知标题
+    NoticeTitle = "",
+    -- 通知内容
+    NoticeContent = "",
+    -- 广告数量
+    NoticeCount = 0,
+    -- 广告下载地址
+    NoticeUrl = "",
+    -- 邀请地址
+    InviteUrl = ""
+}
+
+
+return LuaGlobalData

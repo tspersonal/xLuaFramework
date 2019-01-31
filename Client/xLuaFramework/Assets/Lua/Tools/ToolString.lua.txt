@@ -1,0 +1,60 @@
+--[[
+    类型：模板module
+    功能：字符串函数工具
+    描述：对字符串进行操作的工具
+]]
+local ToolString = {}
+
+
+-- NGUI对字符串进行加粗显示
+function ToolString.BoldString(str)
+    return "[b]" .. str .. "[-]"
+end
+
+-- 截取字符串
+function ToolString.Split(inputStr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t = {}
+    local i = 1
+    local strs = string.gmatch(inputStr, "([^" .. sep .. "]+)")
+    for str in strs do
+        if str == nil then
+            t[i] = ""
+        else
+            t[i] = str
+        end
+        i = i + 1
+    end
+    return t
+end
+
+-- 字符串匹配 返回bool值
+function ToolString.Contains(inputStr, sep)
+    if (inputStr == nil or inputStr == "" or sep == nil or sep == "") then
+        return false
+    end
+    local str = string.find(inputStr, sep)
+    if (str == nil) then
+        return false
+    else
+        return true
+    end
+end
+
+-- 字符串替换
+function ToolString.Replace(inputStr, pattern, replace, n)
+    if (ToolString.Contains(inputStr, pattern)) then
+        return string.gsub(inputStr, pattern, replace, n)
+    else
+        return inputStr
+    end
+end
+
+-- 去除字符串空格
+function ToolString.Trim(inputStr)
+    return (string.gsub(inputStr, "^%s*(.-)%s*$", "%1"))
+end
+
+return ToolString

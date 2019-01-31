@@ -1,0 +1,233 @@
+--[[
+    功能:Lua中的Mono基类模板，目的是为了对应一个C#的Mono
+]]
+local LuaMonoBehaviour = {}
+
+-- Ui名字
+LuaMonoBehaviour.Name = nil
+-- Ui的根物体
+LuaMonoBehaviour.Root = nil
+-- Active状态
+LuaMonoBehaviour.IsActive = false
+
+-- 无效绑定的声明周期 使用自定义实现方法
+LuaMonoBehaviour.DoAwake = nil
+-- 第一次无效绑定的声明周期 如果被子类重写的话 第二次即可激活
+LuaMonoBehaviour.DoOnEnable = nil
+-- 有限绑定的声明周期 如果被子类重写的话 即可激活
+LuaMonoBehaviour.DoStart = nil
+LuaMonoBehaviour.DoFixedUpdate = nil
+LuaMonoBehaviour.DoUpdate = nil
+LuaMonoBehaviour.DoOnDisable = nil
+LuaMonoBehaviour.DoOnDestory = nil
+LuaMonoBehaviour.DoOnApplicationFocus = nil
+LuaMonoBehaviour.DoOnApplicationPause = nil
+LuaMonoBehaviour.DoOnApplicationQuit = nil
+
+-- 添加监听 OnEnable 调用
+LuaMonoBehaviour.DoAddListener = nil
+-- 添加监听 OnDisable 调用
+LuaMonoBehaviour.DoRemoveListener = nil
+-- 设置数据 无生命周期 父类中只声明，不执行逻辑 由子类重写
+LuaMonoBehaviour.DoSetData = nil
+-- 回复数据 无生命周期 父类中只声明，不执行逻辑 由子类重写
+LuaMonoBehaviour.DoResetData = nil
+-- 清理数据 无生命周期 父类中只声明，不执行逻辑 由子类重写
+LuaMonoBehaviour.DoClearData = nil
+
+-- 使用New的构造函数
+function LuaMonoBehaviour:New(o)
+    o = o or {}
+    setmetatable(o, {__index = self})
+    return o
+end
+
+-- 创建Mono
+function LuaMonoBehaviour:Create(obj, data)
+    if (obj == nil) then
+        return
+    end
+    LuaLog.Log("绑定生命周期: " .. self.Name, LogType.Debug)
+    obj.name = self.Name
+    self.Root = obj
+    self.IsActive = false
+
+    -- 需要测试下是否能绑定成功， 如果失败 这两个生命周期可以在LuaUiPanelManager中调用Create 和 Show 实现
+    -- 强制绑定 Awake
+    local luaDoAwake = function()
+        if (self.Root == nil) then
+            return
+        end
+        if (self.DoAwake ~= nil and type(self.DoAwake) == "function") then
+            self:DoAwake()
+        end
+    end
+    luaDoAwake()
+    -- 设置带入数据
+    if (data ~= nil) then
+        self:LuaDoSetData(data)
+    end
+    -- 强制绑定 OnEnable
+    local luaDoOnEnable = function()
+        if (self.Root == nil) then
+            return
+        end
+        self.IsActive = true
+        if (self.DoOnEnable ~= nil and type(self.DoOnEnable) == "function") then
+            self:DoOnEnable()
+        end
+    end
+    LuaMonoEvent:BindUiBaseEvent("OnEnable", obj, luaDoOnEnable)
+    luaDoOnEnable()
+    -- 绑定可以执行的生命周期
+    -- 强制绑定 Start
+    local luaDoStart = function()
+        if (self.Root == nil) then
+            return
+        end
+        if (self.DoStart ~= nil and type(self.DoStart) == "function") then
+            self:DoStart()
+        end
+    end
+    LuaMonoEvent:BindUiBaseEvent("Start", obj, luaDoStart)
+    -- 选择性绑定 FixedUpdate
+    if (self.DoFixedUpdate ~= nil and type(self.DoFixedUpdate) == "function") then
+        local luaDoFixedUpdate = function()
+            if (self.Root == nil) then
+                return
+            end
+            if (self.DoFixedUpdate ~= nil and type(self.DoFixedUpdate) == "function") then
+                self:DoFixedUpdate()
+            end
+        end
+        LuaMonoEvent:BindUiBaseEvent("FixedUpdate", obj, luaDoFixedUpdate)
+    end
+    -- 选择性绑定 Update
+    if (self.DoUpdate ~= nil and type(self.DoUpdate) == "function") then
+        local luaDoUpdate = function()
+            if (self.Root == nil) then
+                return
+            end
+            if (self.DoUpdate ~= nil and type(self.DoUpdate) == "function") then
+                self:DoUpdate()
+            end
+        end
+        LuaMonoEvent:BindUiBaseEvent("Update", obj, luaDoUpdate)
+    end
+    -- 强制绑定 OnDisable
+    local luaDoOnDisable = function()
+        if (self.Root == nil) then
+            return
+        end
+        self.IsActive = false
+        if (self.DoOnDisable ~= nil and type(self.DoOnDisable) == "function") then
+            self:DoOnDisable()
+        end
+    end
+    LuaMonoEvent:BindUiBaseEvent("OnDisable", obj, luaDoOnDisable)
+    -- 强制绑定 OnDestroy
+    local luaDoOnDestroy = function()
+        if (self.Root == nil) then
+            return
+        end
+        if (self.DoOnDestory ~= nil and type(self.DoOnDestory) == "function") then
+            self:DoOnDestory()
+        end
+        self:LuaDoClearData()
+    end
+    LuaMonoEvent:BindUiBaseEvent("OnDestroy", obj, luaDoOnDestroy)
+    -- 选择性绑定 OnApplicationFocus
+    if (self.DoOnApplicationFocus ~= nil and type(self.DoOnApplicationFocus) == "function") then
+        local luaDoOnApplicationFocus = function(focusStatus)
+            if (self.Root == nil) then
+                return
+            end
+            if (self.DoOnApplicationFocus ~= nil and type(self.DoOnApplicationFocus) == "function") then
+                self:DoOnApplicationFocus(focusStatus)
+            end
+        end
+        LuaMonoEvent:BindUiBaseEvent("OnApplicationFocus", obj, luaDoOnApplicationFocus)
+    end
+    -- 选择性绑定 OnApplicationPause
+    if (self.DoOnApplicationPause ~= nil and type(self.DoOnApplicationPause) == "function") then
+        local luaDoOnApplicationPause = function(pause)
+            if (self.Root == nil) then
+                return
+            end
+            if (self.DoOnApplicationPause ~= nil and type(self.DoOnApplicationPause) == "function") then
+                self:DoOnApplicationPause(pause)
+            end
+        end
+        LuaMonoEvent:BindUiBaseEvent("OnApplicationPause", obj, luaDoOnApplicationPause)
+    end
+    -- 选择性绑定 OnApplicationQuit
+    if (self.DoOnApplicationQuit ~= nil and type(self.DoOnApplicationQuit) == "function") then
+        local luaDoOnApplicationQuit = function(pause)
+            if (self.Root == nil) then
+                return
+            end
+            if (self.DoOnApplicationQuit ~= nil and type(self.DoOnApplicationQuit) == "function") then
+                self:DoOnApplicationQuit(pause)
+            end
+        end
+        LuaMonoEvent:BindUiBaseEvent("OnApplicationQuit", obj, luaDoOnApplicationQuit)
+    end
+end
+
+-- 带入数据
+function LuaMonoBehaviour:LuaDoSetData(data)
+    if (self.Root == nil) then
+        return
+    end
+    if (self.DoSetData ~= nil and type(self.DoSetData) == "function") then
+        if (data ~= nil) then
+            self:DoSetData(data)
+        end
+    end
+end
+
+-- 重置数据
+function LuaMonoBehaviour:LuaDoResetData()
+    if (self.Root == nil) then
+        return
+    end
+    if (self.DoResetData ~= nil and type(self.DoResetData) == "function") then
+        self:DoResetData()
+    end
+end
+
+-- 清空数据
+function LuaMonoBehaviour:LuaDoClearData()
+    if (self.Root == nil) then
+        return
+    end
+    if (self.DoClearData ~= nil and type(self.DoClearData) == "function") then
+        self:DoClearData()
+    end
+end
+
+-- 显示ui
+function LuaMonoBehaviour:Show()
+    if (self.Root == nil) then
+        return
+    end
+    self.Root:SetActive(true)
+end
+
+-- 隐藏ui
+function LuaMonoBehaviour:Hide()
+    if (self.Root == nil) then
+        return
+    end
+    self.Root:SetActive(false)
+end
+
+-- 销毁ui
+function LuaMonoBehaviour:Destory()
+    if (self.Root == nil) then
+        return
+    end
+    CS.UnityEngine.GameObject.DestroyImmediate(self.Root)
+end
+
+return LuaMonoBehaviour

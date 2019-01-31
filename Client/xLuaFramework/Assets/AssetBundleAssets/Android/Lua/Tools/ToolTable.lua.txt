@@ -1,0 +1,17 @@
+--[[
+    类型：模板module
+    功能：Table工具
+    描述：无
+]]
+local ToolTable = {}
+
+-- 获取表的长度
+function ToolTable.GetTableLength(target)    
+    local length = 0
+    for k, v in pairs(target) do
+        length = length + 1
+    end
+    return length
+end
+
+return ToolTable

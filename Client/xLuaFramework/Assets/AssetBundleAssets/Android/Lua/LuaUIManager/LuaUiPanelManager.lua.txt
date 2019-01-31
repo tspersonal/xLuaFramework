@@ -1,0 +1,402 @@
+local LuaUiPanelManager = {}
+
+-- 最小的渲染深度，各个场景不一致
+local _nMinDepth = 1
+-- 每一个界面的深度范围
+local _nRangeDepth = 10
+-- 每一个等级的界面深度
+local _nLevelDepth = 500
+
+-- 当前场景所有的界面 用作界面池
+local _dicAllView = require "Tools.Dictionary":New()
+-- 存储所有打开的视图
+local _dicOpenView = require "Tools.Dictionary":New()
+-- 存储所有打开的视图
+local _listOpenView = require "Tools.List":New()
+
+-- 播放打开界面的动画
+local function PlayOpenTween(uiPanelInfo)
+    if (uiPanelInfo == nil or uiPanelInfo.UiPanel == nil) then
+        return
+    end
+    local uiBase = LuaUiRequires[uiPanelInfo.UiName]
+    if (uiBase == nil) then
+        return
+    end
+    local uiTween = nil
+    if (uiPanelInfo.UiTween ~= nil and uiPanelInfo.UiTween ~= "") then
+        uiTween = uiPanelInfo.UiPanel.transform:Find(uiPanelInfo.UiTween).gameObject
+    else
+        uiTween = uiPanelInfo.UiPanel
+    end
+    if (uiTween == nil) then
+        return
+    end
+    local OnFinished = function()
+        uiBase:LuaDoTweenComplete()
+    end
+    if (uiPanelInfo.ShowType == ShowUiType.None) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3.zero
+        uiTween.transform.localScale = CS.UnityEngine.Vector3.one
+    elseif (uiPanelInfo.ShowType == ShowUiType.MinToMax) then
+        uiTween.transform.localScale = CS.UnityEngine.Vector3(0.5, 0.5, 0.5)
+        local twScale = CS.TweenScale.Begin(uiTween, 0.1, CS.UnityEngine.Vector3.one)
+        twScale:ResetToBeginning()
+        twScale:PlayForward()
+        twScale:SetOnFinished(OnFinished)
+    elseif (uiPanelInfo.ShowType == ShowUiType.LeftToRight) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3(-750, 0, 0)
+        local twPosition = CS.TweenPosition.Begin(uiTween, 0.1, CS.UnityEngine.Vector3.zero)
+        twPosition:ResetToBeginning()
+        twPosition:PlayForward()
+        twPosition:SetOnFinished(OnFinished)
+    elseif (uiPanelInfo.ShowType == ShowUiType.RightToLeft) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3(750, 0, 0)
+        local twPosition = CS.TweenPosition.Begin(uiTween, 0.1, CS.UnityEngine.Vector3.zero)
+        twPosition:ResetToBeginning()
+        twPosition:PlayForward()
+        twPosition:SetOnFinished(OnFinished)
+    elseif (uiPanelInfo.ShowType == ShowUiType.FadeInToOut) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3.zero
+        uiTween.transform.localScale = CS.UnityEngine.Vector3.one
+        local uiPanel = uiTween:GetComponent(typeof(CS.UIPanel))
+        if (uiPanel ~= nil) then
+            uiPanel.alpha = 0
+            local twAlpha = CS.TweenAlpha.Begin(uiTween, 1, 1)
+            twAlpha:ResetToBeginning()
+            twAlpha:PlayForward()
+            twAlpha:SetOnFinished(OnFinished)
+        end
+    end
+end
+
+-- 播放关闭界面的动画
+local function PlayCloseTween(uiPanelInfo, bDestory)
+    if (uiPanelInfo == nil or uiPanelInfo.UiPanel == nil) then
+        LuaLog.Log("PlayCloseTween 界面不存在", LogType.Warning)
+        return
+    end
+    local uiTween = nil
+    if (uiPanelInfo.UiTween ~= nil and uiPanelInfo.UiTween ~= "") then
+        uiTween = uiPanelInfo.UiPanel.transform:Find(uiPanelInfo.UiTween).gameObject
+    else
+        uiTween = uiPanelInfo.UiPanel
+    end
+    if (uiTween == nil) then
+        return
+    end
+    local OnFinished = function()
+        if (bDestory) then
+            CS.UnityEngine.GameObject.DestroyImmediate(uiPanelInfo.UiPanel)
+            _dicAllView:Remove(uiPanelInfo.UiName)
+        else
+            uiPanelInfo.UiPanel:SetActive(false)
+            uiTween.transform.localPosition = CS.UnityEngine.Vector3.zero
+            uiTween.transform.localScale = CS.UnityEngine.Vector3.one
+        end
+    end
+    if (uiPanelInfo.ShowType == ShowUiType.None) then
+        OnFinished()
+    elseif (uiPanelInfo.ShowType == ShowUiType.MinToMax) then
+        uiTween.transform.localScale = CS.UnityEngine.Vector3.one
+        local twScale = CS.TweenScale.Begin(uiTween, 0.1, CS.UnityEngine.Vector3(0.5, 0.5, 0.5))
+        twScale:ResetToBeginning()
+        twScale:PlayForward()
+        twScale:SetOnFinished(OnFinished)
+    elseif (uiPanelInfo.ShowType == ShowUiType.LeftToRight) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3.zero
+        local twPosition = CS.TweenPosition.Begin(uiTween, 0.1, CS.UnityEngine.Vector3(-750, 0, 0))
+        twPosition:ResetToBeginning()
+        twPosition:PlayForward()
+        twPosition:SetOnFinished(OnFinished)
+    elseif (uiPanelInfo.ShowType == ShowUiType.RightToLeft) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3.zero
+        local twPosition = CS.TweenPosition.Begin(uiTween, 0.1, CS.UnityEngine.Vector3(750, 0, 0))
+        twPosition:ResetToBeginning()
+        twPosition:PlayForward()
+        twPosition:SetOnFinished(OnFinished)
+    elseif (uiPanelInfo.ShowType == ShowUiType.FadeInToOut) then
+        uiTween.transform.localPosition = CS.UnityEngine.Vector3.zero
+        uiTween.transform.localScale = CS.UnityEngine.Vector3.one
+        local uiPanel = uiTween:GetComponent(typeof(CS.UIPanel))
+        if (uiPanel ~= nil) then
+            uiPanel.alpha = 1
+            local twAlpha = CS.TweenAlpha.Begin(uiTween, 1, 0)
+            twAlpha:ResetToBeginning()
+            twAlpha:PlayForward()
+            twAlpha:SetOnFinished(OnFinished)
+        end
+    end
+end
+
+-- 添加打开的界面
+local function AddOpenView(uiPanelInfo)
+    if (not _listOpenView:Contains(uiPanelInfo.UiName)) then
+        _listOpenView:Add(uiPanelInfo.UiName)
+    end
+    if (not _dicOpenView:ContainsKey(uiPanelInfo.UiName)) then
+        _dicOpenView:Add(uiPanelInfo.UiName, uiPanelInfo)
+    end
+end
+
+-- 删除打开的界面
+local function DeleteOpenView(uiPanelInfo)
+    if (_listOpenView:Contains(uiPanelInfo.UiName)) then
+        _listOpenView:Remove(uiPanelInfo.UiName)
+    end
+    if (_dicOpenView:ContainsKey(uiPanelInfo.UiName)) then
+        _dicOpenView:Remove(uiPanelInfo.UiName)
+    end
+end
+
+-- 加载完毕显示Ui
+local function OnLoadUiPanel(uiPanelInfo, bInstantiate)
+    -- 获取对应的UiBase
+    local uiBase = LuaUiRequires[uiPanelInfo.UiName]
+    if (uiBase ~= nil) then
+        -- 将设置数据放到Awake之后OnEnable之前
+        if (bInstantiate) then
+        else
+            -- 设置带入数据
+            if (uiPanelInfo.UiData ~= nil) then
+                uiBase:LuaDoSetData(uiPanelInfo.UiData)
+            end
+        end
+    else
+        LuaLog.Log("OnLoadUiPanel 绑定UIBase失败：" .. uiPanelInfo.UiName, LogType.Error)
+    end
+    -- 添加界面
+    AddOpenView(uiPanelInfo)
+    -- 打开界面显示
+    uiPanelInfo.UiPanel:SetActive(true)
+    if (uiPanelInfo.UiParent == nil) then
+        uiPanelInfo.UiParent = CS.UnityEngine.GameObject.Find("2DUIRoot").transform
+    end
+    uiPanelInfo.UiPanel.transform:SetParent(uiPanelInfo.UiParent, false)
+    uiPanelInfo.UiPanel.name = uiPanelInfo.UiName
+    uiPanelInfo.UiPanel.transform.localScale = CS.UnityEngine.Vector3.one
+    -- 设置打开动画
+    PlayOpenTween(uiPanelInfo)
+    -- 设置界面对应的脚本数据
+    if (uiBase ~= nil) then
+        -- 如果绑定Awake以及OnEnable失败
+        if (bInstantiate) then
+            uiBase:Create(uiPanelInfo.UiPanel, uiPanelInfo.UiData)
+        else
+        end
+        -- 设置渲染深度
+        if (uiPanelInfo.UiDepth == nil or uiPanelInfo.UiDepth == -1) then
+            local nDepth =
+                _nMinDepth + uiPanelInfo.LevelType * _nLevelDepth +
+                LuaUiPanelManager:GetUiPanelCountByUiLevel(uiPanelInfo.LevelType) * _nRangeDepth
+            uiBase:SetDepth(nDepth)
+        else
+            uiBase:SetDepth(uiPanelInfo.UiDepth)
+        end
+    else
+        LuaLog.Log("OnLoadUiPanel 绑定UIBase失败：" .. uiPanelInfo.UiName, LogType.Error)
+    end
+end
+
+-- 显示界面
+local function ShowUiPanel(panelType, showType, data, bCoverData, nDepth, sTween, parent)
+    -- 界面信息
+    local uiPanelInfo = {
+        -- 界面的UIPanel
+        UiPanel = nil,
+        -- 界面名字
+        UiName = panelType.AssetName,
+        -- 界面对应的AB的名字
+        UiAbName = panelType.AssetBundleName,
+        -- 界面路径
+        UiPath = "",
+        -- 界面动画的对象名字
+        UiTween = sTween,
+        -- 界面的父对象
+        UiParent = parent,
+        -- 界面打开带入的数据
+        UiData = data,
+        -- 界面深度
+        UiDepth = nDepth,
+        -- 界面打开类型
+        ShowType = showType,
+        -- 界面的等级
+        LevelType = panelType.LevelType
+    }
+    local loadType = CS.LocalData.LoadAssetsType
+    if (loadType == LoadAssetsType.Resources) then
+        uiPanelInfo.UiPath = panelType.ResoutcesPath
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        uiPanelInfo.UiPath = panelType.AssetBundlePath
+    end
+    if (_listOpenView:Contains(uiPanelInfo.UiName)) then
+        if (_dicOpenView:ContainsKey(uiPanelInfo.UiName)) then
+            _dicOpenView[uiPanelInfo.UiName].UiData = uiPanelInfo.UiData
+        end
+        LuaLog.Log("ShowUiPanel 界面已经被打开", LogType.Warning)
+        if (bCoverData == nil or bCoverData) then
+            -- 设置界面对应的脚本数据
+            local uiBase = LuaUiRequires[uiPanelInfo.UiName]
+            if (uiBase ~= nil) then
+                uiBase:LuaDoSetData(uiPanelInfo.UiData)
+            else
+                LuaLog.Log("ShowUiPanel 覆盖数据失败" .. uiPanelInfo.UiName, LogType.Error)
+            end
+        end
+        return
+    end
+    local OnLoad = function(obj)
+        -- 加载完成
+        uiPanelInfo.UiPanel = CS.UnityEngine.GameObject.Instantiate(obj)
+        _dicAllView:Add(uiPanelInfo.UiName, uiPanelInfo)
+        OnLoadUiPanel(uiPanelInfo, true)
+    end
+    if (_dicAllView:ContainsKey(uiPanelInfo.UiName)) then
+        -- 存在未显示的界面
+        _dicAllView[uiPanelInfo.UiName].UiData = uiPanelInfo.UiData
+        OnLoadUiPanel(_dicAllView[uiPanelInfo.UiName], false)
+    else
+        -- 不存在界面
+        LuaLoadAssets:LoadGameObjectAsync(uiPanelInfo.UiName, uiPanelInfo.UiAbName, uiPanelInfo.UiPath, OnLoad)
+    end
+end
+
+-- 无动画打开界面 data：打开界面传入的参数  bCoverData：界面存在时，是否覆盖数据 nDepth：深度(等于-1时，就设置深度)
+function LuaUiPanelManager:ShowUiPanelNone(panelType, data, bCoverData, nDepth)
+    if (panelType == nil) then
+        return
+    end
+    ShowUiPanel(panelType, ShowUiType.None, data, bCoverData, nDepth)
+end
+
+-- 由小放大
+function LuaUiPanelManager:ShowUiPanelMinToMax(panelType, data, bCoverData, nDepth, sTween, parent)
+    if (panelType == nil) then
+        return
+    end
+    ShowUiPanel(panelType, ShowUiType.MinToMax, data, bCoverData, nDepth, sTween, parent)
+end
+
+-- 从右边进入界面
+function LuaUiPanelManager:ShowUiPanelRightToLeft(panelType, data, bCoverData, nDepth, sTween, parent)
+    if (panelType == nil) then
+        return
+    end
+    ShowUiPanel(panelType, ShowUiType.RightToLeft, data, bCoverData, nDepth, sTween, parent)
+end
+
+-- 从左边进入界面
+function LuaUiPanelManager:ShowUiPanelLeftToRight(panelType, data, bCoverData, nDepth, sTween, parent)
+    if (panelType == nil) then
+        return
+    end
+    ShowUiPanel(panelType, ShowUiType.LeftToRight, data, bCoverData, nDepth, sTween, parent)
+end
+
+-- 淡入淡出界面
+function LuaUiPanelManager:ShowUiPanelFadeInToOut(panelType, data, bCoverData, nDepth, sTween, parent)
+    if (panelType == nil) then
+        return
+    end
+    ShowUiPanel(panelType, ShowUiType.FadeInToOut, data, bCoverData, nDepth, sTween, parent)
+end
+
+-- 关闭界面
+function LuaUiPanelManager:HideUiPanel(panelType, bDestory)
+    local bExitList = _listOpenView:Contains(panelType.AssetName)
+    local bExitDic = _dicOpenView:ContainsKey(panelType.AssetName)
+    if (not bExitList and not bExitDic) then
+        return
+    elseif (not bExitList) then
+        _dicOpenView:Remove(panelType.AssetName)
+        return
+    elseif (not bExitDic) then
+        _listOpenView:Remove(panelType.AssetName)
+        return
+    else
+        -- 界面正常在打开状态
+        local uiPanelInfo = _dicOpenView[panelType.AssetName]
+        DeleteOpenView(uiPanelInfo)
+        if (uiPanelInfo == nil) then
+            LuaLog.Log("HideUiPanel 删除的界面不存在", LogType.Warning)
+        else
+            PlayCloseTween(uiPanelInfo, bDestory)
+        end
+    end
+end
+
+-- 当前场景是否存在该界面
+function LuaUiPanelManager:HasView(panelType)
+    if (_dicAllView:ContainsKey(panelType.AssetName)) then
+        return true
+    end
+    return false
+end
+
+-- 该界面是否打开
+function LuaUiPanelManager:HasOpenView(panelType)
+    if (_dicOpenView:ContainsKey(panelType.AssetName)) then
+        return true
+    end
+    return false
+end
+
+-- 获取最上层界面
+function LuaUiPanelManager:GetTopUiPanel(panelType)
+    if (_listOpenView:Count() == 0) then
+        LuaLog.Log("GetTopUiPanel 不存在最上层界面", LogType.Warning)
+        return nil
+    else
+        return _listOpenView[panelType]
+    end
+end
+
+-- 强制按等级分层顺序更新所有界面层级
+function LuaUiPanelManager:UpdateUiPanelDepth()
+    for i = 1, _listOpenView:Count() do
+        local uiName = _listOpenView[i]
+        local uiPanelInfo = _dicOpenView[uiName]
+        if (uiPanelInfo == nil) then
+            _listOpenView:Remove(uiName)
+            _dicOpenView:Remove(uiName)
+        else
+            local nDepth =
+                _nMinDepth + uiPanelInfo.LevelType * _nLevelDepth +
+                LuaUiPanelManager:GetUiPanelCountByUiLevel(uiPanelInfo.LevelType) * _nRangeDepth
+            local uiBase = LuaUiRequires[uiPanelInfo.UiName]
+            if (uiBase ~= nil) then
+                -- 设置渲染深度
+                uiBase:SetDepth(nDepth)
+            else
+                LuaLog.Log("UpdateUiPanelDepth 获取UIBase失败: " .. uiPanelInfo.UiName, LogType.Error)
+            end
+        end
+    end
+end
+
+-- 获取某种等级的界面数量
+function LuaUiPanelManager:GetUiPanelCountByUiLevel(levelType)
+    if (levelType == nil) then
+        return
+    end
+    local count = 0
+    for i = 1, _listOpenView:Count() do
+        local key = _listOpenView[i]
+        if (_dicOpenView:ContainsKey(key)) then
+            local uiPanelInfo = _dicOpenView[key]
+            if (uiPanelInfo ~= nil and uiPanelInfo.LevelType == levelType) then
+                count = count + 1
+            end
+        end
+    end
+    return count - 1
+end
+
+-- 切换场景时 清空界面缓存
+function LuaUiPanelManager:ClearData()
+    _dicAllView:Clear()
+    _dicOpenView:Clear()
+    _listOpenView:Clear()
+end
+
+return LuaUiPanelManager

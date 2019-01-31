@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 106905299
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 61f402272ffc7c3c91d52d0e83d360fb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: fc1bf90637927e73cd2f2a41d06c0a16
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9e2747e3775af504da1a4d5a46c5a1ce, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e96b31ce75e592f45a1cff563a4869db, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Prefabs/Panel/Common/panel_result_code.prefab
+Dependencies:
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/fonts/my_fonts.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/shaders/my_shaders.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/textures/common_textures.ab

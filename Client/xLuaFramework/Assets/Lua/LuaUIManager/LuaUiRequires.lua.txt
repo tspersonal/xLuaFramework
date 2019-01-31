@@ -1,0 +1,14 @@
+--[[
+    功能：加载界面脚本
+]]
+local LuaUiRequires = {}
+-- Common
+LuaUiRequires[LuaUiPanelRegister.ResultCode.AssetName] = require "Module.Common.LuaResultCode"
+LuaUiRequires[LuaUiPanelRegister.Await.AssetName] = require "Module.Common.LuaAwait"
+LuaUiRequires[LuaUiPanelRegister.ThirdDialog.AssetName] = require "Module.Common.LuaThirdDialog"
+LuaUiRequires[LuaUiPanelRegister.SecondDialog.AssetName] = require "Module.Common.LuaSecondDialog"
+LuaUiRequires[LuaUiPanelRegister.Marquee.AssetName] = require "Module.Common.LuaMarquee"
+-- Login
+LuaUiRequires[LuaUiPanelRegister.Login.AssetName] = require "Module.Login.LuaLogin"
+
+return LuaUiRequires

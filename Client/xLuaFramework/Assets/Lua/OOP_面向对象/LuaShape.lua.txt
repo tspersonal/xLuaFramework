@@ -1,0 +1,26 @@
+--[[
+    功能：面向对象基类，Shape形状类
+    描述：基类方法New、Area
+]]
+local LuaShape = {}
+LuaShape.__Name = "LuaShape"
+
+-- 默认构造函数
+function LuaShape:Ctor(...)
+    -- body
+end
+
+function LuaShape:New(...)
+    local o = {}
+    setmetatable(o, {__index = self})
+    self:Ctor(...)
+    return o
+end
+
+LuaShape = LuaShape:New()
+
+function LuaShape:Area()
+    LuaLog("Shape面积为")
+end
+
+return LuaShape

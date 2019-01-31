@@ -1,0 +1,111 @@
+--[[
+    功能：二级弹窗 处理客户端调起的提示弹窗 
+]]
+local LuaSecondDialog = require "LuaUIManager.LuaUiBase":New()
+
+LuaSecondDialog.Name = LuaUiPanelRegister.SecondDialog.AssetName
+
+-- 提示数据
+LuaSecondDialog.DialogData = nil
+
+-- 标题
+local _labTitle
+-- 内容
+local _labDesc
+-- 确定
+local _btnConfirm
+local _labConfirm
+-- 取消
+local _btnCancel
+local _labCancel
+
+-- 显示消息
+local function ShowSecondDialog(dialogData)
+    if (dialogData.Title == nil) then
+        _labTitle.text = "提 示"
+    else
+        _labTitle.text = dialogData.Title
+    end
+    if (dialogData.Desc == nil) then
+        _labDesc.text = ""
+    else
+        _labDesc.text = dialogData.Desc
+    end
+    if (dialogData.Confirm == nil) then
+        _labConfirm.text = "确 认"
+    else
+        _labConfirm.text = dialogData.Confirm
+    end
+    if (dialogData.Cancel == nil or dialogData.DialogType == SecondDialogType.None) then
+        _labCancel.text = "取 消"
+        _btnConfirm:SetActive(true)
+        _btnCancel:SetActive(false)
+        _btnConfirm.transform.localPosition = CS.UnityEngine.Vector3(0, -126, 0)
+    else
+        _labCancel.text = dialogData.Cancel
+        _btnConfirm:SetActive(true)
+        _btnCancel:SetActive(true)
+        _btnConfirm.transform.localPosition = CS.UnityEngine.Vector3(133, -126, 0)
+        _btnCancel.transform.localPosition = CS.UnityEngine.Vector3(-133, -126, 0)
+    end
+end
+
+-- 点击确定
+local function OnClickBtnConfirm(go)
+    if
+        (LuaSecondDialog.DialogData == nil or LuaSecondDialog.DialogData.DialogType == nil or
+            LuaSecondDialog.DialogData.DialogType == SecondDialogType.None)
+     then
+        -- 无处理
+    elseif (LuaSecondDialog.DialogData.DialogType == SecondDialogType.LogoutAccount) then
+    -- 注销账号
+    end
+    LuaUiPanelManager:HideUiPanel(LuaUiPanelRegister.SecondDialog, false)
+end
+
+-- 点击取消
+local function OnClickBtnCancel(go)
+    LuaUiPanelManager:HideUiPanel(LuaUiPanelRegister.SecondDialog, false)
+end
+
+function LuaSecondDialog:DoAwake()
+    local base = self.Root.transform:Find("Base")
+    _labTitle = base:Find("LabTitle"):GetComponent(typeof(CS.UILabel))
+    _labDesc = base:Find("LabDesc"):GetComponent(typeof(CS.UILabel))
+    _btnConfirm = base:Find("BtnConfirm").gameObject
+    _labConfirm = _btnConfirm.transform:Find("LabConfirm"):GetComponent(typeof(CS.UILabel))
+    _btnCancel = base:Find("BtnCancel").gameObject
+    _labCancel = _btnCancel.transform:Find("LabCancel"):GetComponent(typeof(CS.UILabel))
+end
+
+function LuaSecondDialog:DoRegister()
+    LuaUiEventListener:OnClick(_btnConfirm, OnClickBtnConfirm)
+    LuaUiEventListener:OnClick(_btnCancel, OnClickBtnCancel)
+end
+
+function LuaSecondDialog:DoSetData(dialogData)
+    if (dialogData ~= nil) then
+        if (dialogData.DialogType == nil) then
+            dialogData.DialogType = SecondDialogType.None
+        end
+        LuaSecondDialog.DialogData = dialogData
+        if (LuaSecondDialog.IsActive) then
+            ShowSecondDialog(dialogData)
+        end
+    end
+end
+
+function LuaSecondDialog:DoOnEnable()
+    if (LuaSecondDialog.DialogData == nil) then
+        LuaSecondDialog.DialogData = {
+            DialogType = SecondDialogType.None,
+            Title = "提 示",
+            Desc = "",
+            Confirm = "确 认",
+            Cancel = "取 消"
+        }
+    end
+    ShowSecondDialog(LuaSecondDialog.DialogData)
+end
+
+return LuaSecondDialog

@@ -1,0 +1,26 @@
+ManifestFileVersion: 0
+CRC: 1023895368
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 24476af390b1249e0645e7b093d93337
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2011.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2002.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2004.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2003.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2010.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2007.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2005.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2001.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2006.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2008.mp3
+- Assets/MyAssets/Resources/Sounds/FaceSounds/2009.mp3
+Dependencies: []

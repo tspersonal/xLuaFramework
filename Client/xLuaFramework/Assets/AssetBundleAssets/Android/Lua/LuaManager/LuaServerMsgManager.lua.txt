@@ -1,0 +1,300 @@
+local LuaServerMsgManager = {}
+
+--玩家信息
+local function OnCharacterInfo(data)
+    LuaGlobalData.Player = data
+    if LuaGlobalData.Player.lastEnterRoomId ~= 0 then
+        local sendData = {CodeId = LuaGlobalData.Player.lastEnterRoomId}
+        LuaSendManager:SendMsg(opCodes.Client_EnterRoom, sendData)
+    else
+        LuaScenesManager:LoadScene(LuaAssetsType.ScenesType.Main)
+    end
+    CS.LocalData.GamePhone = LuaGlobalData.Player.name
+    CS.LocalData.GamePassword = LuaGlobalData.Player.password
+    LuaGlobalData.Player.isLogin = true
+    LuaGlobalData.Player.isLogout = false
+    CS.LocalData.isOtherLogin = false
+end
+
+-- 玩家数据变化
+local function OnLivingDataChanged(data)
+    for i = 1, #data, 1 do
+        if data[i].LivingType == LivingType.OtherName then
+            -- 昵称
+            LuaGlobalData.Player.otherName = data[i].Value
+        elseif data[i].LivingType == LivingType.Money then
+            -- 金钱
+            LuaGlobalData.Player.money = tonumber(Tools.SplitNumber(data[i].Value))
+        elseif data[i].LivingType == LivingType.Gold then
+            -- 金币
+            LuaGlobalData.Player.gold = tonumber(data[i].Value)
+        elseif data[i].LivingType == LivingType.HeadId then
+            -- 头像id
+            LuaGlobalData.Player.headId = data[i].Value
+        elseif data[i].LivingType == LivingType.AccountChange then
+            -- 账号类型
+            LuaGlobalData.Player.accountType = tonumber(data[i].Value)
+        elseif data[i].LivingType == LivingType.UnionApply then
+            -- 公会申请
+            LuaGlobalData.Player.aliQueryCount = data[i].Value
+        elseif data[i].LivingType == LivingType.CanCreateRoom then
+            -- 是否可以创建房间
+            LuaGlobalData.Player.canCreateRoom = data[i].Value
+        elseif data[i].LivingType == LivingType.RedPacket then
+            -- 红包信息
+            LuaGlobalData.Player.redPacket = data[i].Value
+        end
+    end
+end
+
+-- 焦点重连后同步更新玩家实时变化的基础信息
+local function OnPlayerBase(data)
+    LuaGlobalData.Player.guid = data.guid
+    LuaGlobalData.Player.money = tonumber(Tools.SplitNumber(data.money))
+    LuaGlobalData.Player.lastEnterRoomId = data.lastEnterRoomId
+    LuaGlobalData.Player.accountType = data.accountType
+end
+
+-- 创建房间成功
+local function OnRoomCreateAck(data)
+    if data.RoomCreateType == RoomCreateType.Persional then
+        --个人开房
+    elseif data.RoomCreateType == RoomCreateType.Club then
+        --俱乐部开房
+    elseif data.RoomCreateType == RoomCreateType.Alignment then
+    --联盟开房
+    end
+end
+
+-- 修改名字
+local function OnModifyPlayerBase(data)
+    LuaGlobalData.Player.otherName = data.NickName
+    LuaGlobalData.Player.headId = data.HeadId
+    if GetCurUIPanelName() == PanelType.PlayerFirst and not (LuaGlobalData.Player.OtherNameHasModify) then
+        HideUIPanel()
+    end
+    LuaGlobalData.Player.OtherNameHasModify = true
+end
+
+-- 注销 账号被挤
+local function OnCharacterLogout(data)
+    LuaLog.Log("账号被挤！注销账号", LogType.Critical)
+    if data.Guid == LuaGlobalData.Player.guid then
+        if data.logoutType == LogoutType.KickByOtherConnection then
+            CS.LocalData.isOtherLogin = true
+            -- CS.LocalData.GamePhone = ""
+            -- CS.LocalData.GamePassword = ""
+            LuaUiPanelManager:ShowUiPanelMinToMax(LuaUiPanelRegister.Login)
+        end
+    end
+end
+
+function LuaServerMsgManager:OnServerMsg(cmd, jsonString)
+    LuaLog.Log("receive:---> cmd:" .. cmd .. ":" .. jsonString, LogType.Info)
+    if cmd == opCodes.Server_ResultCode then
+        -------------------------全局-------------------------
+        --失败返回
+        local data = json.decode(jsonString)
+        LuaResultCodeManager:OnResultCode(data)
+    elseif cmd == opCodes.Server_Version_Update then
+        --服务器配置更新
+        CS.ServerInfo.Data = json.decode(jsonString)
+        LuaGlobalFuntcion.UpdateServerConfig()
+    elseif cmd == opCodes.Server_Character_LivingDataChanged then
+        --玩家数据变化
+        local data = json.decode(jsonString)
+        OnLivingDataChanged(data)
+    elseif cmd == opCodes.Server_PlayerBase then
+        --焦点重连后同步更新玩家实时变化的基础信息
+        local data = json.decode(jsonString)
+        OnPlayerBase(data)
+    elseif cmd == opCodes.Server_Character_Info then
+        -------------------------登录-------------------------
+        --玩家登陆
+        local data = json.decode(jsonString)
+        OnCharacterInfo(data)
+    elseif cmd == opCodes.Server_Character_Logout then
+        --注销
+        local data = json.decode(jsonString)
+        OnCharacterLogout(data)
+    elseif cmd == opCodes.Server_LastCreateRoomConfigAck then
+        -------------------------主菜单-------------------------
+        --房间配置
+        OnCreateRoomInfo(jsonString)
+    elseif cmd == opCodes.Server_ModifyPlayerBase then
+        --修改名字
+        local data = json.decode(jsonString)
+        OnModifyPlayerBase(data)
+    elseif cmd == opCodes.Server_PlayerCreditRecords then
+        --动态信用
+        -- OnResultMessageXinYongData(jsonString)
+    elseif cmd == opCodes.Server_Notice then
+        --新消息
+        -- OnQueryMessage(jsonString)
+    elseif cmd == opCodes.Server_RoomRoundInfoList then
+        --我的牌普
+        -- OnResultPaiPuData(jsonString)
+    elseif cmd == opCodes.Server_RoomRoundInfoRemove then
+        --删除牌普
+        -- OnResultDeletePaiPu(jsonString)
+    elseif cmd == opCodes.Server_RoomCreateAck then
+        --创建房间成功
+        local data = json.decode(jsonString)
+        OnRoomCreateAck(data)
+    elseif cmd == opCodes.Server_TexasRoomList then
+        --房间列表
+        OnRoomListData(jsonString)
+    elseif cmd == opCodes.Server_TexasRoomRecordBaseList then
+        --主页战绩
+        OnResultMenuZhanJiList(jsonString)
+    elseif cmd == opCodes.Server_RedPacket then
+        --收取红包
+        OnResultRedPacket(jsonString)
+    elseif cmd == opCodes.Server_TexasRoomRecordAck then
+        --个人、联盟、俱乐部战绩
+        OnResultHistoryList(jsonString)
+    elseif cmd == opCodes.Server_AlignmentInfo then
+        -------------------------个人-------------------------
+        -- 我的公会
+        OnResultMyConference(jsonString)
+    elseif cmd == opCodes.Server_ClubMemberInfo then
+        -- 我的社区
+        OnResultMyCommunity(jsonString)
+    elseif cmd == opCodes.Server_RecycleMoney then
+        -- 回收转发
+        OnResultRecycleMoney(jsonString, true)
+    elseif cmd == opCodes.Server_RecycleMoneyAck then
+        -- 回收反馈
+        OnResultRecycleMoneyAck(jsonString)
+    elseif cmd == opCodes.Server_PlayerCommunity then
+        -------------------------社区-------------------------
+        -- 社区分销我的收益
+        OnResultMyEarnings(jsonString)
+    elseif cmd == opCodes.Server_PlayerCommunityTable then
+        -- 社区分销我的收益的详情
+        OnResultMyEarningsDetail(jsonString)
+    elseif cmd == opCodes.Server_GoldToMoneyRecord then
+        -- 社区转出至余额的记录
+        OnResultToBalanceRecord(jsonString)
+    elseif cmd == opCodes.Server_MoneyToGoldRecord then
+        -- 社区转入至基金的记录
+        OnResultToFundRecord(jsonString)
+    elseif cmd == opCodes.Server_ContributionDetail then
+        -- 社区贡献总览数据
+        OnResultContribute(jsonString)
+    elseif cmd == opCodes.Server_RoomInfo then
+        -------------------------游戏-------------------------
+        --房间信息
+        OnRoomInfo(jsonString)
+    elseif cmd == opCodes.Server_PlayerSeating then
+        --玩家入座
+        OnPlayerSeat(jsonString)
+    elseif cmd == opCodes.Server_PlayerStandUp then
+        --玩家站起
+        OnPlayerSrandUp(jsonString)
+    elseif cmd == opCodes.Server_PlayerLeave then
+        --玩家离开房间
+        OnPlayerLeaveTable(jsonString)
+    elseif cmd == opCodes.Server_RoomActive then
+        --房间已激活
+        OnTableActive(jsonString)
+    elseif cmd == opCodes.Server_PlayerBuyChips then
+        --购买筹码
+        OnBuyChipsSucceed(jsonString)
+    elseif cmd == opCodes.Server_GameStart then
+        --开始游戏
+        OnGameStart(jsonString)
+    elseif cmd == opCodes.Server_PostCard then
+        --发牌
+        OnDearCards(jsonString)
+    elseif cmd == opCodes.Server_WaitPlayerDownChips then
+        --指定玩家操作
+        OnWaitOpetatePlayer(jsonString)
+    elseif cmd == opCodes.Server_PlayerDownChips then
+        --玩家操作成功
+        OnPlayerOpeateSucceed(jsonString)
+    elseif cmd == opCodes.Server_ShowCommonCard then
+        --翻底牌
+        OnShowCommonCards(jsonString)
+    elseif cmd == opCodes.Server_PlayerDownAnte then
+        --前注
+        OnAntChips(jsonString)
+    elseif cmd == opCodes.Server_SubPoolList then
+        --池底
+        OnSubPoolList(jsonString)
+    elseif cmd == opCodes.Server_ShowCompareCard then
+        --亮底牌
+        OnLiangPai(jsonString)
+    elseif cmd == opCodes.Server_PlayerAutoOperateType then
+        --亮底牌
+        OnAutoOperateState(jsonString)
+    elseif cmd == opCodes.Server_GamePlayLastOperateTypes then
+        --回合结束清理状态
+        OnCircleOver(jsonString)
+    elseif cmd == opCodes.Server_GameOver then
+        --结算
+        OnRoundOver(jsonString)
+    elseif cmd == opCodes.Server_ApplyStoreShips then
+        --筹码到账
+        OnChipApplyPlayer(jsonString)
+    elseif cmd == opCodes.Server_UseFanFanKan then
+        --发发看
+        OnLookCards(jsonString)
+    elseif cmd == opCodes.Server_RoomSetLeaveKeepSeat then
+        --留座离桌
+        OnChangePlayerSeat(jsonString)
+    elseif cmd == opCodes.Server_RoomOver then
+        --房间结束
+        OnTableOver(jsonString)
+    elseif cmd == opCodes.Server_AskPlayerBuyInsurance then
+        --激活保险
+        OnActiveInsurance(jsonString)
+    elseif cmd == opCodes.Server_BroadCastRoomMessage then
+        --激活保险
+        onInsurancePlayerOperate(jsonString, true)
+    elseif cmd == opCodes.Server_ResultPlayerBuyInsurance then
+        --购买保险结果
+        OnResultBuyInsurance(jsonString)
+    elseif cmd == opCodes.Server_RoomRoundData then
+        --牌局回顾
+        onResultLookBackData(jsonString)
+    elseif cmd == opCodes.Server_PlayerSetShowHoldCard then
+        --亮牌
+        OnResultShowCard(jsonString)
+    elseif cmd == opCodes.Server_RoomPlayerShowedCards then
+        --最后亮牌
+        OnShowLiangPaiPlayer(jsonString)
+    elseif cmd == opCodes.Server_RoomCurrentData then
+        --实时战况
+        OnResultZhanKuangData(jsonString)
+    elseif cmd == opCodes.Server_RoomSetting then
+        --房间设置
+        OnResultRoomSetting(jsonString)
+    elseif cmd == opCodes.Server_RoomStopSet then
+        --房间暂停
+        OnResultTablePause(jsonString)
+    elseif cmd == opCodes.Server_RoomChat then
+        --房间聊天
+        OnPlayerVoice(jsonString)
+    elseif cmd == opCodes.Server_RoomJackPotRecords then
+        --jackpot record
+        OnResultJackpotRecordData(jsonString)
+    elseif cmd == opCodes.Server_RoomJackPotRemains then
+        --jackpot change
+        OnResultJackpotRemainValue(jsonString)
+    elseif cmd == opCodes.Server_RoomSeatPlayerBase then
+        --玩家信息
+        OnResultGamePlayerInfo(jsonString)
+    elseif cmd == opCodes.Server_AddOperateTime then
+        --购买操作时间
+        OnResultBuyOperateTime(jsonString)
+    elseif cmd == opCodes.Server_AddInsuranceOperateTime then
+        --购买保险时间
+        OnBuyInsuranceTime(jsonString)
+    elseif cmd == opCodes.Server_AlignmentJackPotInfo then
+        --奖池信息
+        OnResultGameJackpotData(jsonString)
+    end
+end
+
+return LuaServerMsgManager

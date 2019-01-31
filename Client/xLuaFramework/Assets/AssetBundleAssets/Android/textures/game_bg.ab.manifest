@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 119858981
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6c7f2cdfbcb6d1dc9d708a54ea4426ac
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Textures/GameBg/game_bg_1.jpg
+- Assets/MyAssets/Resources/Textures/GameBg/game_bg_3.jpg
+- Assets/MyAssets/Resources/Textures/GameBg/game_bg_2.jpg
+Dependencies: []

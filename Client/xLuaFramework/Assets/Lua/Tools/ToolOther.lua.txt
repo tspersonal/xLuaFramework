@@ -1,0 +1,41 @@
+--[[
+    类型：模板module
+    功能：其他工具
+    描述：无
+]]
+local ToolOther = {}
+
+-- 获取牌型字符串
+function ToolOther.GetCardType(cards)
+    local cardTypeString = ""
+    if (cards == nil or #cards <= 0) then
+        cardTypeString = "无牌型"
+    else
+        local typeIndex = CS.ToolsFunc.GetCardType(cards)
+        if typeIndex == 0 then
+            cardTypeString = "高牌"
+        elseif typeIndex == 1 then
+            cardTypeString = "对子"
+        elseif typeIndex == 2 then
+            cardTypeString = "两对"
+        elseif typeIndex == 3 then
+            cardTypeString = "三条"
+        elseif typeIndex == 4 then
+            cardTypeString = "顺子"
+        elseif typeIndex == 5 then
+            cardTypeString = "同花"
+        elseif typeIndex == 6 then
+            cardTypeString = "葫芦"
+        elseif typeIndex == 7 then
+            cardTypeString = "四条"
+        elseif typeIndex == 8 then
+            cardTypeString = "同花顺"
+        elseif typeIndex == 9 then
+            cardTypeString = "皇家同花顺"
+        end
+    end
+
+    return cardTypeString
+end
+
+return ToolOther

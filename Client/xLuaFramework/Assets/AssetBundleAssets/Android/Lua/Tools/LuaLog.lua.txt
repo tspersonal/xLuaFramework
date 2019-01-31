@@ -1,0 +1,36 @@
+--[[
+    功能：日志管理
+]]
+
+local LuaLog = {}
+
+function LuaLog.Log(str, logType)
+    if (logType == nil) then
+        logType = LogType.Normal
+    end
+
+    if (logType == LogType.Normal) then
+        -- CS.Debuger.DebugerHelper.LogNormal(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Normal)
+    elseif (logType == LogType.Debug) then
+        -- CS.Debuger.DebugerHelper.LogDebug(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Debug)
+    elseif (logType == LogType.Info) then
+        -- CS.Debuger.DebugerHelper.LogInfo(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Info)
+    elseif (logType == LogType.Warning) then
+        -- CS.Debuger.DebugerHelper.LogWarning(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Warning)
+    elseif (logType == LogType.Error) then
+        -- CS.Debuger.DebugerHelper.LogError(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Error)
+    elseif (logType == LogType.Except) then
+        -- CS.Debuger.DebugerHelper.LogExcept(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Except)
+    elseif (logType == LogType.Critical) then
+        -- CS.Debuger.DebugerHelper.LogCritical(str)
+        CS.Debuger.DebugerHelper.Log(str, CS.Debuger.DebugerHelper.LevelType.Critical)
+    end
+end
+
+return LuaLog

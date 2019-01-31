@@ -1,0 +1,12 @@
+local LuaSendManager = {}
+
+-- 发送消息给服务器
+function LuaSendManager:SendMsg(code, data)
+    if data == nil then
+        CS.ClientToServerMsg.Send(code)
+    else
+        CS.ClientToServerMsg.Send(code, json.encode(data))
+    end
+end
+
+return LuaSendManager

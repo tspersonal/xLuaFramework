@@ -1,0 +1,51 @@
+--[[
+    功能：注册全局的资源类型
+]]
+local LuaGlobalAssetsRegister = {
+    -- 图集 不需Resources加载
+    Atlas = {
+        BTheSamePath = true,
+        AssetBundleName = "my_atlas",
+        AssetBundlePath = "atlas/my_atlas.ab",
+        AssetName = {
+            -- Common
+            Common = "Common",
+            Loading = "Loading",
+            Cards = "Cards",
+            -- Login
+            Login = "Login",
+            -- Main
+            CreateRoom = "CreateRoom"
+            -- Game
+        }
+    },
+    -- 字体 不需Resources加载
+    Fonts = {
+        BTheSamePath = false,
+        Hwht = {
+            BTheSamePath = true,
+            AssetBundleName = "my_fonts",
+            AssetBundlePath = "fonts/my_fonts.ab",
+            AssetName = {Hwht = "HWHT"}
+        }
+    },
+    -- 着色器 不需Resources加载
+    Shaders = {
+        BTheSamePath = false,
+        -- 公共Shader
+        MyShaders = {
+            BTheSamePath = true,
+            AssetBundleName = "my_shaders",
+            AssetBundlePath = "shaders/my_shaders.ab",
+            AssetName = {
+                UnlitPremultipliedColored = "Unlit - Premultiplied Colored",
+                UnlitText = "Unlit - Text",
+                UnlitTransparentColored = "Unlit - Transparent Colored",
+                UnlitTransparentMasked = "Unlit - Transparent Masked",
+                UnlitTransparentPacked = "Unlit - Transparent Packed"
+            }
+        }
+    }
+}
+
+return LuaGlobalAssetsRegister

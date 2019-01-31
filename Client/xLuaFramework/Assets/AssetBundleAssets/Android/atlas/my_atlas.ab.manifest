@@ -1,0 +1,46 @@
+ManifestFileVersion: 0
+CRC: 3502843495
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f1f0871fda97a4ca1e0f6b33328f3d15
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f11573591d96aac6dc01f901b15a3a70
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/UI/Common/Loading/Atlas/Loading.prefab
+- Assets/MyAssets/UI/Main/CreateRoom/Atlas/CreateRoom.png
+- Assets/MyAssets/UI/Login/Login/Atlas/Login.png
+- Assets/MyAssets/UI/Common/Cards/Atlas/Cards.prefab
+- Assets/MyAssets/UI/Common/Cards/Atlas/Cards.png
+- Assets/MyAssets/UI/Common/Common/Atlas/Common.prefab
+- Assets/MyAssets/UI/Common/Cards/Atlas/Cards.mat
+- Assets/MyAssets/UI/Main/CreateRoom/Atlas/CreateRoom.mat
+- Assets/MyAssets/UI/Common/Loading/Atlas/Loading.png
+- Assets/MyAssets/UI/Common/Loading/Atlas/Loading.mat
+- Assets/MyAssets/UI/Common/Common/Atlas/Common.png
+- Assets/MyAssets/UI/Login/Login/Atlas/Login.mat
+- Assets/MyAssets/UI/Common/Common/Atlas/Common.mat
+- Assets/MyAssets/UI/Main/CreateRoom/Atlas/CreateRoom.prefab
+- Assets/MyAssets/UI/Login/Login/Atlas/Login.prefab
+Dependencies:
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/shaders/my_shaders.ab
+- F:/Company_TS/Company/A_NewProject/Client/NewProject/Assets/AssetBundleAssets/Android/materials/shader_materials.ab

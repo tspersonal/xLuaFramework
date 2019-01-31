@@ -1,0 +1,199 @@
+--[[
+    功能：声音管理
+]]
+local LuaSoundsManager = require "LuaCore.LuaMonoBehaviour":New()
+
+LuaSoundsManager.Name = LuaMonoRegister.SoundsManager
+
+-- 背景音乐
+local _asMusic
+-- 音效
+local _asEffect
+-- 语音
+local _asVoice
+
+LuaSoundsManager.DoAwake = function()
+    for i = 1, 3 do
+        local name = "sound" .. i
+        local sound = CS.UnityEngine.GameObject(name)
+        if (i == 1) then
+            sound.name = "Music"
+            _asMusic = sound:AddComponent(typeof(CS.UnityEngine.AudioSource))
+            _asMusic.playOnAwake = false
+        elseif (i == 2) then
+            sound.name = "Effect"
+            _asEffect = sound:AddComponent(typeof(CS.UnityEngine.AudioSource))
+            _asEffect.playOnAwake = false
+        elseif (i == 3) then
+            sound.name = "Voice"
+            _asVoice = sound:AddComponent(typeof(CS.UnityEngine.AudioSource))
+            _asVoice.playOnAwake = false
+        end
+        sound.transform:SetParent(LuaSoundsManager.Root.transform, false)
+        sound.transform.localScale = CS.UnityEngine.Vector3.one
+        sound.transform.localPosition = CS.UnityEngine.Vector3.zero
+    end
+end
+
+LuaSoundsManager.DoOnEnable = function()
+end
+
+LuaSoundsManager.DoStart = function()
+end
+
+LuaSoundsManager.DoUpdate = function()
+end
+
+-- 播放背景音乐，属于背景音乐
+function LuaSoundsManager:PlaySoundForBgMusic(soundType, bLoop)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = soundType.AssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = soundType.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = soundType.AssetBundlePath
+    end
+    local OnLoad = function(audioClip)
+        -- 加载完成
+        if (audioClip == nil) then
+            return
+        end
+        _asMusic.clip = audioClip
+        if (bLoop == nil) then
+            _asMusic.loop = true
+        else
+            if (_asMusic.isPlaying) then
+                _asMusic:Stop()
+            end
+            _asMusic.loop = bLoop
+        end
+        _asMusic:Play()
+    end
+    LuaLoadAssets:LoadAudioClipAsync(name, soundType.AssetBundleName, path, OnLoad)
+end
+
+-- 播放Ui声音，属于音效
+function LuaSoundsManager:PlaySoundForUi(soundType, bCover)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = soundType.AssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = soundType.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = soundType.AssetBundlePath
+    end
+    local OnLoad = function(audioClip)
+        -- 加载完成
+        if (audioClip == nil) then
+            return
+        end
+        _asEffect.loop = false
+        if (bCover == nil or not bCover) then
+            _asEffect:PlayOneShot(audioClip)
+        else
+            if (_asEffect.isPlaying) then
+                _asEffect:Stop()
+            end
+            _asEffect.clip = audioClip
+            _asEffect:Play()
+        end
+    end
+    LuaLoadAssets:LoadAudioClipAsync(name, soundType.AssetBundleName, path, OnLoad)
+end
+
+-- 播放特效音效，考虑到有可能会播放相同种类但是音频不同的音效  比如男女声音的赢了音效
+function LuaSoundsManager:PlaySoundForEffect(soundType, bCover)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = soundType.AssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = soundType.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = soundType.AssetBundlePath
+    end
+    local OnLoad = function(audioClip)
+        -- 加载完成
+        if (audioClip == nil) then
+            return
+        end
+        _asEffect.loop = false
+        if (bCover == nil or not bCover) then
+            _asEffect:PlayOneShot(audioClip)
+        else
+            if (_asEffect.isPlaying) then
+                _asEffect:Stop()
+            end
+            _asEffect.clip = audioClip
+            _asEffect:Play()
+        end
+    end
+    LuaLoadAssets:LoadAudioClipAsync(name, soundType.AssetBundleName, path, OnLoad)
+end
+
+-- 播放游戏中的音效
+function LuaSoundsManager:PlaySoundForGame(soundType, bCover)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = soundType.AssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = LuaAssetsRegister.Sounds.EffectSounds.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = LuaAssetsRegister.Sounds.EffectSounds.AssetBundlePath
+    end
+    local OnLoad = function(audioClip)
+        -- 加载完成
+        if (audioClip == nil) then
+            return
+        end
+        _asEffect.loop = false
+        if (bCover == nil or not bCover) then
+            _asEffect:PlayOneShot(audioClip)
+        else
+            if (_asEffect.isPlaying) then
+                _asEffect:Stop()
+            end
+            _asEffect.clip = audioClip
+            _asEffect:Play()
+        end
+    end
+    LuaLoadAssets:LoadAudioClipAsync(name, LuaAssetsRegister.Sounds.EffectSounds.AssetBundleName, path, OnLoad)
+end
+
+-- 播放讲话的声音，这里指快捷语，暂不包括语音
+function LuaSoundsManager:PlaySoundForGame(soundType, bCover)
+    local loadType = CS.LocalData.LoadAssetsType
+    local name = soundType.AssetName
+    local path = ""
+    if (loadType == LoadAssetsType.Resources) then
+        path = soundType.ResoutcesPath .. name
+    elseif (loadType == LoadAssetsType.AssetBundle) then
+        path = soundType.AssetBundlePath
+    end
+    local OnLoad = function(audioClip)
+        -- 加载完成
+        if (audioClip == nil) then
+            return
+        end
+        _asVoice.loop = false
+        if (bCover == nil or not bCover) then
+            _asVoice:PlayOneShot(audioClip)
+        else
+            if (_asVoice.isPlaying) then
+                _asVoice:Stop()
+            end
+            _asVoice.clip = audioClip
+            _asVoice:Play()
+        end
+    end
+    LuaLoadAssets:LoadAudioClipAsync(name, soundType.AssetBundleName, path, OnLoad)
+end
+
+-- 清空数据
+function LuaSoundsManager:ClearData()
+    _asMusic:Stop()
+    _asEffect:Stop()
+    _asVoice:Stop()
+end
+
+return LuaSoundsManager

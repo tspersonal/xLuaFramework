@@ -1,0 +1,9 @@
+--[[
+    功能：注册带有Mono的Lua脚本
+]]
+local LuaMonoRegister = {
+    -- 声音管理 需要挂载一个Mono
+    SoundsManager = "SoundsManager",
+}
+
+return LuaMonoRegister

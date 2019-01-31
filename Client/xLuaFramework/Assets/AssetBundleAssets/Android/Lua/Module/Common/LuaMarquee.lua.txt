@@ -1,0 +1,66 @@
+--[[
+    功能：跑马灯
+]]
+local LuaMarquee = require "LuaUIManager.LuaUiBase":New()
+
+LuaMarquee.Name = LuaUiPanelRegister.Marquee.AssetName
+
+local _desc
+local _labDesc
+
+-- 显示区域的宽度
+local _ndescWidth = 0
+-- 移动速度
+local _fMoveSpeed = 100
+-- 跑马灯队列
+local _queueMarquee = require "Tools.Queue":New()
+
+-- 移动结束
+local function OnTweenPositionComplete()
+    if (_queueMarquee:IsEmpty()) then
+        LuaUiPanelManager:HideUiPanel(LuaUiPanelRegister.Marquee, false)
+    else
+        _labDesc.transform.localPosition = CS.UnityEngine.Vector3(50, -2, 0)
+        local content = _queueMarquee:DeQueue()
+        _labDesc.text = content
+        local labDescWidth = _labDesc.width
+        local duration = (_ndescWidth + labDescWidth + 100) / _fMoveSpeed
+        local twPosition =
+            CS.TweenPosition.Begin(
+            _labDesc.gameObject,
+            duration,
+            CS.UnityEngine.Vector3(-(_ndescWidth + labDescWidth + 50), -2, 0)
+        )
+        -- twPosition.animationCurve = CS.UnityEngine.AnimationCurve.EaseInOut(0, 0, 1, 1)
+        twPosition:ResetToBeginning()
+        twPosition:PlayForward()
+        twPosition:SetOnFinished(OnTweenPositionComplete)
+    end
+end
+
+function LuaMarquee:DoAwake()
+    local marquee = self.Root.transform:Find("Marquee")
+    local marqueeView = marquee:GetComponent(typeof(CS.UIPanel))
+    _desc = marquee:Find("Desc"):GetComponent(typeof(CS.UIWidget))
+    _labDesc = _desc.transform:Find("LabDesc"):GetComponent(typeof(CS.UILabel))
+
+    LuaMarquee.ListUiPanel:Add(marqueeView)
+
+    _ndescWidth = _desc.width
+end
+
+function LuaMarquee:DoSetData(data)
+    if (data ~= nil) then
+        _queueMarquee:EnQueue(data)
+    end
+end
+
+function LuaMarquee:DoOnEnable()
+    OnTweenPositionComplete()
+end
+
+function LuaMarquee:DoTweenComplete()
+    -- OnTweenPositionComplete()
+end
+
+return LuaMarquee

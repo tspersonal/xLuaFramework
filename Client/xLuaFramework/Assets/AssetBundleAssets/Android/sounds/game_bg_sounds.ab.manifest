@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 907301950
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 804b62f714895052ad469d5159b04934
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3f7d0c5e0986ec71841622bcb2f9be1c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/MyAssets/Resources/Sounds/GameBgSounds/MainBgSound.mp3
+- Assets/MyAssets/Resources/Sounds/GameBgSounds/GameBgSound.ogg
+Dependencies: []
